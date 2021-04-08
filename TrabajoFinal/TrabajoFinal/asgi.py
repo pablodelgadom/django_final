@@ -1,5 +1,5 @@
 """
-ASGI config for Django_trabajofinal project.
+ASGI config for TrabajoFinal project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Django_trabajofinal.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TrabajoFinal.settings')
 
 application = get_asgi_application()
