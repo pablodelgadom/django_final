@@ -44,3 +44,22 @@ class Mensaje:
 
     def __str__(self):
         return self.asunto
+
+
+
+class especialista:
+    dni=models.CharField(max_length=10, null=False, blank=False)
+    nombre=models.CharField(max_length=30, null=False, blank=False)
+    apellidos=models.CharField(max_length=50, null=False, blank=False)
+    direccion=models.CharField(max_length=100, null=False, blank=False)
+    fechaNacimiento=models.DateField(verbose_name="Fecha de Nacimiento", null=False)
+    foto=models.ImageField(upload_to='nucleo/static/img',verbose_name="imagen", null=False)
+    biografia=models.CharField(max_length=255, null=False, blank=False)
+    idUsuario=models.ForeignKey(User, on_delete=models.CASCADE, max_length=11, null=False)
+
+    class Meta:
+        verbose_name="Especialista"
+        verbose_name_plural="Especialistas"
+
+    def __str__(self):
+        return self.nombre+" "+self.apellidos
