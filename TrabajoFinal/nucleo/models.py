@@ -5,7 +5,7 @@ from django.db import models
 # Create your models here.
 
 class Cliente(models.Model):
-    dni=models.CharField(max_length=10, null=False, blank=False)
+    dni=models.CharField(max_length=10, null=False, blank=False) 
     nombre=models.CharField(max_length=30, null=False, blank=False)
     apellidos=models.CharField(max_length=50, null=False, blank=False)
     direccion=models.CharField(max_length=100, null=False, blank=False)
