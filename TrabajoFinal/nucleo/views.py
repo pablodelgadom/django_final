@@ -1,3 +1,4 @@
+from nucleo.models import Cliente
 from django.shortcuts import render
 
 # Create your views here.
@@ -6,6 +7,4 @@ from django.shortcuts import render
 #Portada
 
 def Portada(request):
-    noticias=Noticia.objects.all()
-    data={'noticias':noticias}
-    return render(request, 'nucleo/Portada.html', data)
+    return render(request, 'nucleo/Portada.html')
