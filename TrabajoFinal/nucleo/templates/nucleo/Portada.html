@@ -2,8 +2,36 @@
 {% block titulo %} Portada {% endblock %}
 
 {%block contenido %}
-<div>
-    <a>Hola </a>
-</div>
+{% comment %} <div>
+<h1>Clientes</h1>
+</div> {% endcomment %}
+{% if clientes %}
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">DNI</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Direccion</th>
+      <th scope="col">Fecha de nacimiento</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in clientes %}
+    <tr>
+      <td>{{ c.id }}</td>
+      <td>{{ c.dni }}</td>
+      <td>{{ c.nombre }}</td>
+      <td>{{ c.direccion }}</td>
+      <td>{{ c.fechaNacimiento }}</td>
+    </tr>
+    {% endfor %}
+
+    {% else %}
+    <h1>No hay registros de clientes</h1>
+
+    {% endif %}
+  </tbody>
+</table>
 
 {% endblock %}

@@ -7,4 +7,6 @@ from django.shortcuts import render
 #Portada
 
 def Portada(request):
-    return render(request, 'nucleo/Portada.html')
+    cliente=Cliente.objects.all().order_by('id')
+    context={'clientes':cliente}
+    return render(request, 'nucleo/Portada.html',context)
