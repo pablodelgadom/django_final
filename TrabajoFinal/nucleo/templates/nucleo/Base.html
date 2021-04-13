@@ -43,7 +43,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link">Usted ha iniciado sesion como {{request.User.nombre}}</a>
+              <a class="nav-link">Usted ha iniciado sesion como {{request.User.username}}</a>
             </li>
           </ul>
         </div>
@@ -52,7 +52,7 @@
     <div id="contenido-principal">
         {% block contenido %} {% endblock %}
     </div>
-    <footer id="pie-pagina">
+    <footer id="contenedor">
         <footer class="py-5 bg-dark">
     <div class="container">
       <p class="m-0 text-center text-white">Copyright &copy; Yo te ayudo</p>

@@ -26,3 +26,8 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+#contenedor {
+    width: 95%;
+    max-width: 1200px;
+  }
