@@ -10,7 +10,7 @@ class Cliente(models.Model):
     apellidos=models.CharField(max_length=50, null=False, blank=False)
     direccion=models.CharField(max_length=100, null=False, blank=False)
     fechaNacimiento=models.DateField(verbose_name="Fecha de Nacimiento", null=False)
-    foto=models.ImageField
+    foto=models.ImageField(upload_to='photos/',verbose_name="Foto", null=False)
     idUsuario=models.ForeignKey(User, on_delete=models.CASCADE, max_length=11, null=False)
 
     class Meta:
