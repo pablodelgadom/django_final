@@ -1,4 +1,3 @@
-from typing import TextIO
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -50,7 +49,7 @@ class Cita(models.Model):
         verbose_name_plural="Citas"
 
     def __str__(self):
-        return self.fecha
+        return self.informe
 
 
 class Mensaje(models.Model):
