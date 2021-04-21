@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 
 class Cliente(models.Model):
-    dni=models.CharField(max_length=10, null=False, blank=False) 
+    dni=models.CharField(max_length=10, null=False, blank=False, unique=True) 
     nombre=models.CharField(max_length=30, null=False, blank=False)
     apellidos=models.CharField(max_length=50, null=False, blank=False)
     direccion=models.CharField(max_length=100, null=False, blank=False)
@@ -20,7 +20,7 @@ class Cliente(models.Model):
         return self.nombre+" "+self.apellidos
 
 class Especialista(models.Model):
-    dni=models.CharField(max_length=10, null=False, blank=False)
+    dni=models.CharField(max_length=10, null=False, blank=False, unique=True)
     nombre=models.CharField(max_length=30, null=False, blank=False)
     apellidos=models.CharField(max_length=50, null=False, blank=False)
     direccion=models.CharField(max_length=100, null=False, blank=False)
@@ -49,7 +49,7 @@ class Cita(models.Model):
         verbose_name_plural="Citas"
 
     def __str__(self):
-        return self.informe
+        return self.idEspecialista+" " +self.idCliente+" "+self.informe
 
 
 class Mensaje(models.Model):
@@ -66,4 +66,4 @@ class Mensaje(models.Model):
         verbose_name_plural="Mensajes"
 
     def __str__(self):
-        return self.asunto
+        return self.idEmisor+" "+self.idReceptor+" "+self.asunto
