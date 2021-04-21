@@ -25,30 +25,30 @@ class CitaInline(admin.StackedInline):
 class ClienteAdmin(admin.ModelAdmin):
     list_filter = ['nombre']
     list_display = [field.name for field in Cliente._meta.fields]
-    ordering=['id']
-    list_per_page=2
+    ordering=['nombre']
+    list_per_page=10
     inlines=[CitaInline,]
     form=ClienteAdminForm
 
 class EspecialistaAdmin(admin.ModelAdmin):
     list_filter = ['nombre']
     list_display = [field.name for field in Especialista._meta.fields]
-    ordering=['id']
-    list_per_page=2
+    ordering=['nombre']
+    list_per_page=10
     form=EspecialistaAdminForm
 
 
 class MensajeAdmin(admin.ModelAdmin):
     list_filter = ['idEmisor']
     list_display = [field.name for field in Mensaje._meta.fields]
-    ordering=['id']
-    list_per_page=2
+    ordering=['idEmisor']
+    list_per_page=10
 
 class CitaAdmin(admin.ModelAdmin):
     list_filter = ['fecha']
     list_display = [field.name for field in Cita._meta.fields]
-    ordering=['id']
-    list_per_page=2
+    ordering=['idCliente']
+    list_per_page=10
 
 # Register your models here.
 

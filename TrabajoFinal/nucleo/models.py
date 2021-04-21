@@ -4,13 +4,13 @@ from django.db import models
 # Create your models here.
 
 class Cliente(models.Model):
-    dni=models.CharField(max_length=10, null=False, blank=False, unique=True) 
+    dni=models.CharField(max_length=10, null=False, blank=False, unique=True)
     nombre=models.CharField(max_length=30, null=False, blank=False)
     apellidos=models.CharField(max_length=50, null=False, blank=False)
     direccion=models.CharField(max_length=100, null=False, blank=False)
     fechaNacimiento=models.DateField(verbose_name="Fecha de Nacimiento", null=False)
     foto=models.ImageField(upload_to='photos/',verbose_name="Foto", null=False)
-    idUsuario=models.ForeignKey(User, on_delete=models.CASCADE, max_length=11, null=False)
+    idUsuario=models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True)
 
     class Meta:
         verbose_name="Cliente"
@@ -27,7 +27,7 @@ class Especialista(models.Model):
     fechaNacimiento=models.DateField(verbose_name="Fecha de Nacimiento", null=False)
     foto=models.ImageField(upload_to='nucleo/static/img',verbose_name="imagen", null=False)
     biografia=models.CharField(max_length=255, null=False, blank=False)
-    idUsuario=models.ForeignKey(User, on_delete=models.CASCADE, max_length=11, null=False)
+    idUsuario=models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True)
 
     class Meta:
         verbose_name="Especialista"

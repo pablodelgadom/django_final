@@ -3,16 +3,14 @@
 
 {%block contenido %}
 <div>
-{% comment %} <h1>HOLA</H1> {% endcomment %}
-{% comment %} <img src="photos/Portada.jfif"> {% endcomment %}
+<img src="photos/Portada.jpg">
 </div>
 {% if clientes %}
 <table class="table">
   <thead class="thead-dark">
     <tr>
-      <th scope="col">ID</th>
-      <th scope="col">DNI</th>
       <th scope="col">Nombre</th>
+      <th scope="col">DNI</th>
       <th scope="col">Direccion</th>
       <th scope="col">Fecha de nacimiento</th>
     </tr>
@@ -20,9 +18,8 @@
   <tbody>
     {% for c in clientes %}
     <tr>
-      <td>{{ c.id }}</td>
-      <td>{{ c.dni }}</td>
       <td>{{ c.nombre }}</td>
+      <td>{{ c.dni }}</td>
       <td>{{ c.direccion }}</td>
       <td>{{ c.fechaNacimiento }}</td>
     </tr>

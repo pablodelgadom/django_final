@@ -50,17 +50,17 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'login' %}">Iniciar sesion</a>
+              <a class="nav-link" {% comment %}  href="{% url 'login' %}" {% endcomment %}>Iniciar sesion</a>
             </li> 
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'register_view' %}">Registrarse</a>
+              {% comment %} <a class="nav-link" href="{% url 'register_view' %}">Registrarse</a> {% endcomment %}
             </li>
             {% else %}
             <li class="nav-item">
               <a class="nav-link">Usted ha iniciado sesion como {{request.user.username}}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'logout' %}">Cerrar sesion</a>
+              {% comment %} <a class="nav-link" href="{% url 'logout' %}">Cerrar sesion</a> {% endcomment %}
             </li>
             {% endif %}
           </ul>
