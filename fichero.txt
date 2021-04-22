@@ -1,0 +1,23 @@
+# packages in environment at C:\Users\Pablo\miniconda3\envs\django2:
+#
+# Name                    Version                   Build  Channel
+asgiref                   3.3.4                    pypi_0    pypi
+ca-certificates           2020.10.14                    0  
+certifi                   2020.11.8        py37haa95532_0  
+django                    3.2                      pypi_0    pypi
+django-jet                1.0.8                    pypi_0    pypi
+openssl                   1.1.1h               he774522_0  
+pillow                    8.2.0                    pypi_0    pypi
+pip                       20.3             py37haa95532_0  
+python                    3.7.9                h60c2a47_0  
+pytz                      2020.4             pyhd3eb1b0_0  
+setuptools                50.3.2           py37haa95532_2  
+six                       1.15.0                   pypi_0    pypi
+sqlite                    3.33.0               h2a8f88b_0  
+sqlparse                  0.4.1                    pypi_0    pypi
+typing-extensions         3.7.4.3                  pypi_0    pypi
+vc                        14.1                 h0510ff6_4  
+vs2015_runtime            14.16.27012          hf0eaf9b_3  
+wheel                     0.36.0             pyhd3eb1b0_0  
+wincertstore              0.2                      py37_0  
+zlib                      1.2.11               h62dcd97_4  
