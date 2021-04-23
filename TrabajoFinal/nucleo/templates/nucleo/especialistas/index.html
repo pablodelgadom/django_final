@@ -1,0 +1,42 @@
+{% extends 'nucleo/base.html' %} 
+{% block titulo %} Especialistas {% endblock %}
+
+{%block contenido %}
+{% if especialistas %}
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">DNI</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Apellidos</th>
+      <th scope="col">Direccion</th>
+      <th scope="col">Fecha de nacimiento</th>
+      <th scope="col">Foto</th>
+      <th scope="col">Biografia</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for e in especialistas %}
+    <tr>
+      <td>{{ e.dni }}</td>
+      <td>{{ e.nombre }}</td>
+      <td>{{ e.apellidos}}</td>
+      <td>{{ e.direccion }}</td>
+      <td>{{ e.fechaNacimiento }}</td>
+      <td>{{ e.foto }}</td>
+      <td>{{ e.biografia }}</td>
+      {% comment %} <td>
+        <a class="btn btn-primary" href="{%url 'nucleo:editarCoches' pk=e.id %}">Editar</a>
+        <a class="btn btn-danger" href="{%url 'nucleo:borrarCoches' pk=e.id %}">Eliminar</a>
+      </td> {% endcomment %}
+    </tr>
+    {% endfor %}
+
+    {% else %}
+    <h1>No hay registros de especialistas</h1>
+
+    {% endif %}
+  </tbody>
+</table>
+
+{% endblock %}
