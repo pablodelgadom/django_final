@@ -10,18 +10,15 @@ from django.urls.base import reverse_lazy
 #Portada
 
 def Portada(request):
-<<<<<<< Updated upstream
-    return render(request, 'nucleo/Portada.html')
-=======
-    cliente=Cliente.objects.all().order_by('nombre')
-    context={'clientes':cliente}
+    especialista=Especialista.objects.all()
+    context={'especialistas':especialista}
     return render(request, 'nucleo/Portada.html',context)
 
 
 #Especialistas
 
 def indexEspecialistas(request):
-    especialista=Especialista.objects.all().order_by('nombre')
+    especialista=Especialista.objects.all()
     context={'especialistas':especialista}
     return render(request, 'nucleo/especialistas/index.html',context)
 
@@ -35,7 +32,7 @@ def crearEspecialistas(request):
         form = especialistaForm(request.POST)
         if form.is_valid():
             form.save()
-        return redirect('coches:indexCoches')
+        return redirect('especialistas:indexEspecialistas')
     else:
         form = especialistaForm()
 
@@ -75,4 +72,3 @@ class especialistaDelete(DeleteView):
     model = Especialista
     template_name = 'nucleo/especialistas/delete.html'
     success_url = reverse_lazy('nucleo:indexEspecialistas')
->>>>>>> Stashed changes

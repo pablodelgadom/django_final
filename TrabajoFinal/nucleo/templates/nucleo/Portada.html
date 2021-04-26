@@ -2,37 +2,42 @@
 {% block titulo %} Portada {% endblock %}
 
 {%block contenido %}
-<<<<<<< Updated upstream
-<div>
-    <a>Hola </a>
-</div>
-=======
-{% if clientes %}
+
+{% if request.user.is_staff %}
+
+{% if especialistas %}
 <table class="table">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Nombre</th>
-      <th scope="col">DNI</th>
-      <th scope="col">Direccion</th>
-      <th scope="col">Fecha de nacimiento</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for c in clientes %}
-    <tr>
-      <td>{{ c.nombre }}</td>
-      <td>{{ c.dni }}</td>
-      <td>{{ c.direccion }}</td>
-      <td>{{ c.fechaNacimiento }}</td>
-    </tr>
-    {% endfor %}
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">DNI</th>
+        <th scope="col">Direccion</th>
+        <th scope="col">Fecha de nacimiento</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in especialistas %}
+      <tr>
+        <td>{{ e.nombre }}</td>
+        <td>{{ e.dni }}</td>
+        <td>{{ e.direccion }}</td>
+        <td>{{ e.fechaNacimiento }}</td>
+        <td>
+          {% comment %} <a class="btn btn-primary" href="{%url 'nucleo:editarEspecialistas' pk=e.id %}">Editar</a> {% endcomment %}
+          {% comment %} <a class="btn btn-danger" href="{%url 'nucleo:borrarEspecialistas' pk=e.id %}">Eliminar</a> {% endcomment %}
+        </td>
+      </tr>
+      {% endfor %}
 
-    {% else %}
-    <h1>No hay registros de clientes</h1>
+      {% else %}
+      <h1>No hay registros de especialistas</h1>
 
-    {% endif %}
-  </tbody>
-</table>
->>>>>>> Stashed changes
+      {% endif %}
+      {% endif %}
+
+      
+    </tbody>
+  </table>
 
 {% endblock %}
