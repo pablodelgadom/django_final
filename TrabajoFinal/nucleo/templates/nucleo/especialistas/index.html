@@ -2,6 +2,7 @@
 {% block titulo %} Especialistas {% endblock %}
 
 {%block contenido %}
+
 {% if especialistas %}
 <table class="table">
   <thead class="thead-dark">
@@ -26,8 +27,8 @@
       <td>{{ e.foto }}</td>
       <td>{{ e.biografia }}</td>
       {% comment %} <td>
-        <a class="btn btn-primary" href="{%url 'nucleo:editarCoches' pk=e.id %}">Editar</a>
-        <a class="btn btn-danger" href="{%url 'nucleo:borrarCoches' pk=e.id %}">Eliminar</a>
+        <a class="btn btn-primary" href="{%url 'nucleo:editarEspecialistas' pk=e.id %}">Editar</a>
+        <a class="btn btn-danger" href="{%url 'nucleo:borrarEspecialistas' pk=e.id %}">Eliminar</a>
       </td> {% endcomment %}
     </tr>
     {% endfor %}

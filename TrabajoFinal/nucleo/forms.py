@@ -14,7 +14,8 @@ class especialistaForm(forms.ModelForm):
             'direccion',
             'fechaNacimiento',
             'foto',
-            'biografia'
+            'biografia',
+            'idUsuario'
         ]
         labels = {
             'dni': 'DNI',
@@ -23,13 +24,14 @@ class especialistaForm(forms.ModelForm):
             'direccion': 'Direccion',
             'fechaNacimiento': 'Fecha de nacimiento',
             'foto': 'Foto',
-            'biografia': 'Biografia'
+            'biografia': 'Biografia',
+            'idUsuario': 'Id de usuario'
         }
         widgets = {
             'dni': forms.TextInput(attrs={'class':'form-control'}), 
             'nombre': forms.TextInput(attrs={'class':'form-control'}),
             'apellidos': forms.TextInput(attrs={'class':'form-control'}),
             'direccion': forms.TextInput(attrs={'class':'form-control'}),
-            'fechaNacimiento': forms.Select(attrs={'class':'form-control'}),
             'biografia': forms.TextInput(attrs={'class':'form-control'}),
+            'idUsuario': forms.Select(attrs={'class':'form-control'}),
         }
