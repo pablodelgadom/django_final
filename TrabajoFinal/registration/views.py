@@ -1,3 +1,4 @@
+from registration.forms import UserCreationFormWithEmail
 from django.shortcuts import redirect, render
 from django.contrib.auth import logout as do_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,7 +11,7 @@ from django.views.generic import CreateView
 # Create your views here.
 
 class SignupView(CreateView):
-    form_class=UserCreationForm
+    form_class=UserCreationFormWithEmail
     template_name='registration/registro.html'
 
     def get_success_url(self):
