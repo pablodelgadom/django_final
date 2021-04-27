@@ -5,7 +5,7 @@ from django.conf import settings
 from registration import views
 
 urlpatterns = [
-    path('register', views.register_view, name = "register_view"),
+    path('registro', views.SignupView.as_view(), name = "registro"),
     #path('login', views.login),
     path('logout', views.logout),
 ]

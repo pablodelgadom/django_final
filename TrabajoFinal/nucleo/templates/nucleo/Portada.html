@@ -34,10 +34,40 @@
       <h1>No hay registros de especialistas</h1>
 
       {% endif %}
+
+{% if clientes %}
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">DNI</th>
+        <th scope="col">Direccion</th>
+        <th scope="col">Fecha de nacimiento</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in clientes %}
+      <tr>
+        <td>{{ c.nombre }}</td>
+        <td>{{ c.dni }}</td>
+        <td>{{ c.direccion }}</td>
+        <td>{{ c.fechaNacimiento }}</td>
+        <td>
+          <a class="btn btn-primary">Activar</a>
+        </td>
+      </tr>
+      {% endfor %}
+
+      {% else %}
+      <h1>No hay registros de clientes</h1>
+
+      {% endif %}
+
       {% endif %}
 
       
-    </tbody>
+  </tbody>
   </table>
 
 {% endblock %}

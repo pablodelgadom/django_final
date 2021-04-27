@@ -10,8 +10,10 @@ from django.urls.base import reverse_lazy
 #Portada
 
 def Portada(request):
+    cliente=Cliente.objects.all()
     especialista=Especialista.objects.all()
-    context={'especialistas':especialista}
+    context={'especialistas':especialista,
+    'clientes':cliente}
     return render(request, 'nucleo/Portada.html',context)
 
 
