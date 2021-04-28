@@ -3,6 +3,7 @@ from nucleo.models import Cliente, Especialista
 from django.shortcuts import redirect, render
 from django.views.generic import ListView,CreateView,UpdateView,DeleteView
 from django.urls.base import reverse_lazy
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -74,3 +75,8 @@ class especialistaDelete(DeleteView):
     model = Especialista
     template_name = 'nucleo/especialistas/delete.html'
     success_url = reverse_lazy('nucleo:indexEspecialistas')
+
+
+def activar(request, id_cliente):
+    if request.User.is_active is False:
+        request.User.is_active = True

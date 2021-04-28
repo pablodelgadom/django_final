@@ -35,7 +35,7 @@ class UserProfileForm(ModelForm):
         widgets = {
             'first_name': forms.TextInput(
                 attrs={
-                    'placeholder': 'Ingrese sus nombres',
+                    'placeholder': 'Ingrese su nombre',
                 }
             ),
             'last_name': forms.TextInput(

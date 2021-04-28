@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.http.response import JsonResponse
 from django.utils.decorators import method_decorator
+from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
 from registration.forms import UserCreationFormWithEmail, UserProfileForm
 from django.shortcuts import redirect, render
@@ -24,6 +25,9 @@ class SignupView(CreateView):
 def logout(request):
     # Finalizamos la sesión
     do_logout(request)
+    #mensaje
+    messages.info(request, "Salistes exitosamente")
+    user_logged_out.connect(show_message)
     # Redireccionamos a la portada
     return redirect('/')
 
@@ -34,37 +38,10 @@ def show_message(sender, user, request, **kwargs):
     user_logged_out.connect(show_message)
 
 
-class UserProfileView(LoginRequiredMixin, UpdateView):
-    model = User
+class UserEditView(UpdateView):
     form_class = UserProfileForm
     template_name = 'registration/perfil.html'
-    success_url = reverse_lazy('nucleo:indexEspecialistas')
-
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super().dispatch(request, *args, **kwargs)
+    success_url = reverse_lazy('nucleo:Portada')
 
     def get_object(self, queryset=None):
         return self.request.user
-
-    def post(self, request, *args, **kwargs):
-        data = {}
-        try:
-            action = request.POST['action']
-            if action == 'edit':
-                form = self.get_form()
-                data = form.save()
-            else:
-                data['error'] = 'No ha ingresado a ninguna opción'
-        except Exception as e:
-            data['error'] = str(e)
-        return JsonResponse(data)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Edición de Perfil'
-        context['entity'] = 'Perfil'
-        context['list_url'] = self.success_url
-        context['action'] = 'edit'
-        return context
