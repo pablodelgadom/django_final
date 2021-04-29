@@ -1,16 +1,18 @@
+from nucleo.forms import clienteForm, especialistaForm
 from nucleo.models import User
-from registration.forms import UserCreationFormWithEmail, UserProfileForm
+from registration.forms import StudentSignUpForm, UserCreationFormWithEmail, UserProfileForm
 from django.shortcuts import redirect
 from django.contrib.auth import logout as do_logout
 from django.contrib.auth.signals import user_logged_out
 from django.contrib import messages
 from django.urls.base import reverse_lazy
 from django.views.generic import CreateView, UpdateView
+from django.contrib.auth import login
 
 # Create your views here.
 
 class SignupView(CreateView):
-    form_class=UserCreationFormWithEmail
+    form_class=clienteForm
     template_name='registration/registro.html'
 
     def get_success_url(self):
@@ -39,3 +41,19 @@ class UserEditView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+
+class StudentSignUpView(CreateView):
+    model = User
+    form_class = StudentSignUpForm
+    template_name = 'registration/registro.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['is_cliente'] = True
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('nucleo:Portada')

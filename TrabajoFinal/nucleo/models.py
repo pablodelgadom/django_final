@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.fields import BooleanField
 
 # Create your models here.
 
@@ -23,12 +24,8 @@ class Role(models.Model):
 
 
 class User(AbstractUser):
-    USER_TYPE_CHOICES = (
-      (1, 'cliente'),
-      (2, 'especialista'),
- 
-  )
-    user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
+    is_cliente = models.BooleanField('cliente status', default=False)
+    is_especialista = models.BooleanField('especialista status', default=False)
     roles = models.ManyToManyField(Role)
 
 

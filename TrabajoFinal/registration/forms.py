@@ -1,14 +1,15 @@
 from django import forms
-from nucleo.models import User
+from nucleo.models import Cliente, User
 from django.contrib.auth.forms import UserCreationForm
 from django.forms.models import ModelForm
+from django.db import transaction
 
 class UserCreationFormWithEmail(UserCreationForm):
     email=forms.EmailField(required=True,help_text="Requerido. 254 caracteres maximo")
 
     class Meta:
         model=User
-        fields=('username','password1','password2','email')
+        fields=('username','password1','password2','email',)
 
     def save(self, commit=True):
         user = super(UserCreationFormWithEmail, self).save()
@@ -22,6 +23,21 @@ class UserCreationFormWithEmail(UserCreationForm):
             raise forms.ValidationError("Este email ya esta en uso, prueba con otro")
         return value
 
+
+class StudentSignUpForm(UserCreationForm):
+    interests = forms.ModelMultipleChoiceField
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.is_student = True
+        user.save()
+        student = Cliente.objects.create(user=user)
+        student.interests.add(*self.cleaned_data.get('interests'))
+        return user
 
 
 class UserProfileForm(ModelForm):

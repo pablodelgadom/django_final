@@ -3,7 +3,7 @@
 
 {%block contenido %}
 
-{% if request.User.is_staff %}
+{% if request.user.is_staff %}
 
 {% if especialistas %}
 <table class="table">
@@ -24,8 +24,8 @@
         <td>{{ e.direccion }}</td>
         <td>{{ e.fechaNacimiento }}</td>
         <td>
-          {% comment %} <a class="btn btn-primary" href="{%url 'nucleo:editarEspecialistas' pk=e.id %}">Editar</a> {% endcomment %}
-          {% comment %} <a class="btn btn-danger" href="{%url 'nucleo:borrarEspecialistas' pk=e.id %}">Eliminar</a> {% endcomment %}
+          <a class="btn btn-primary" href="{%url 'nucleo:editarEspecialistas' e.pk %}">Editar</a>
+          <a class="btn btn-danger" href="{%url 'nucleo:borrarEspecialistas' e.pk  %}">Eliminar</a>
         </td>
       </tr>
       {% endfor %}

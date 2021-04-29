@@ -1,0 +1,12 @@
+{% extends 'nucleo/base.html' %} 
+{% block titulo %} Portada {% endblock %}
+
+{%block contenido %}
+
+<form action="{% url 'nucleo:borrarEspecialistas' e.pk %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Borrar especialista">
+</form>
+
+
+{% endblock %}

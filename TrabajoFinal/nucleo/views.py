@@ -45,7 +45,7 @@ class especialistaCreate(CreateView):
     model = Especialista
     form_class = especialistaForm
     template_name = 'nucleo/especialistas/create.html'
-    success_url = reverse_lazy('nucleo:indexEspecialistas')
+    success_url = reverse_lazy('nucleo:Portada')
 
 def editarEspecialistas(request, id_especialista):
     especialista = Especialista.objects.get(id=id_especialista)
@@ -74,7 +74,7 @@ def borrarEspecialistas(request, id_especialista):
 class especialistaDelete(DeleteView):
     model = Especialista
     template_name = 'nucleo/especialistas/delete.html'
-    success_url = reverse_lazy('nucleo:indexEspecialistas')
+    success_url = reverse_lazy('nucleo:Portada')
 
 
 def activar(request, id_cliente):
