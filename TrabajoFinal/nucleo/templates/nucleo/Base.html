@@ -42,7 +42,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-          {% if not user.is_authenticated %}
+          {% if not User.is_authenticated %}
             <li class="nav-item active">
               <a class="nav-link" href=""
                 >Inicio
@@ -57,7 +57,7 @@
             </li>
             {% else %}
             <li class="nav-item">
-              <a class="nav-link">Usted ha iniciado sesion como {{request.user.username}}</a>
+              <a class="nav-link">Usted ha iniciado sesion como {{request.User.username}}</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'logout' %}">Cerrar sesion</a>

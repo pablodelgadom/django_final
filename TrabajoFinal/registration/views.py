@@ -1,15 +1,9 @@
-from django.contrib.auth.models import User
-from django.http.response import JsonResponse
-from django.utils.decorators import method_decorator
-from django.views import generic
-from django.views.decorators.csrf import csrf_exempt
+from nucleo.models import User
 from registration.forms import UserCreationFormWithEmail, UserProfileForm
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.contrib.auth import logout as do_logout
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.signals import user_logged_out
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
 from django.urls.base import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
