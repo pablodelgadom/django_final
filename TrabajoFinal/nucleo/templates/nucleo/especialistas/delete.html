@@ -3,7 +3,7 @@
 
 {%block contenido %}
 
-<form action="{% url 'nucleo:borrarEspecialistas' e.pk %}" method="post">
+<form method="post">
     {% csrf_token %}
     <input type="submit" value="Borrar especialista">
 </form>

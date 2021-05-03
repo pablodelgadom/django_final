@@ -1,9 +1,9 @@
-from nucleo.forms import especialistaForm
-from nucleo.models import Cliente, Especialista
+from django.http import request
+from nucleo.forms import UserForm
+from nucleo.models import User
 from django.shortcuts import redirect, render
-from django.views.generic import ListView,CreateView,UpdateView,DeleteView
+from django.views.generic import CreateView,UpdateView,DeleteView
 from django.urls.base import reverse_lazy
-from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -11,8 +11,8 @@ from django.contrib.auth.models import User
 #Portada
 
 def Portada(request):
-    cliente=Cliente.objects.all()
-    especialista=Especialista.objects.all()
+    cliente=User.objects.filter(is_cliente=True)#.filter(is_activate=False)
+    especialista=User.objects.filter(is_especialista=True)
     context={'especialistas':especialista,
     'clientes':cliente}
     return render(request, 'nucleo/Portada.html',context)
@@ -20,63 +20,52 @@ def Portada(request):
 
 #Especialistas
 
-def indexEspecialistas(request):
-    especialista=Especialista.objects.all()
-    context={'especialistas':especialista}
-    return render(request, 'nucleo/especialistas/index.html',context)
-
-class especialistaList(ListView):
-    model = Especialista
-    template_name= 'nucleo/especialistas/index.html'
-
-
 def crearEspecialistas(request):
     if request.method == 'POST':
-        form = especialistaForm(request.POST)
+        form = UserForm(request.POST)
         if form.is_valid():
             form.save()
         return redirect('especialistas:indexEspecialistas')
     else:
-        form = especialistaForm()
+        form = UserForm()
 
     return render(request, 'nucleo/especialistas/create.html', {'form':form})
 
 class especialistaCreate(CreateView):
-    model = Especialista
-    form_class = especialistaForm
+    model = User
+    form_class = UserForm
     template_name = 'nucleo/especialistas/create.html'
     success_url = reverse_lazy('nucleo:Portada')
 
 def editarEspecialistas(request, id_especialista):
-    especialista = Especialista.objects.get(id=id_especialista)
+    especialista = User.objects.get(id=id_especialista)
     if request.method == 'GET':
-        form = especialistaForm(instance=especialista)
+        form = UserForm(instance=especialista)
     else:
-        form = especialistaForm(request.POST, instance=especialista)
+        form = UserForm(request.POST, instance=especialista)
         if form.is_valid():
             form.save()
-        return redirect('especialista:especialistaList')
+        return redirect('nucleo:Portada')
     return render(request, 'nucleo/especialistas/create.html', {'form':form})
 
 class especialistaUpdate (UpdateView):
-    model = Especialista
-    form_class = especialistaForm
+    model = User
+    form_class = UserForm
     template_name = 'nucleo/especialistas/create.html'
-    success_url = reverse_lazy('nucleo:indexEspecialistas')
+    success_url = reverse_lazy('nucleo:Portada')
 
 def borrarEspecialistas(request, id_especialista):
-    especialista = Especialista.objects.get(id=id_especialista)
-    if request.method == 'POST':
-        especialista.delete()
-        return redirect('especialista:especialistaList')
-    return render(request, 'nucleo/especialistas/delete.html', {'especialista':especialista})
+    especialista = User.objects.get(id=id_especialista)
+    
+    especialista.delete()
+    return redirect('nucleo:Portada')
 
 class especialistaDelete(DeleteView):
-    model = Especialista
-    template_name = 'nucleo/especialistas/delete.html'
+    model = User
+    template_name = "nucleo/especialistas/delete.html"
     success_url = reverse_lazy('nucleo:Portada')
 
 
-def activar(request, id_cliente):
-    if request.User.is_active is False:
-        request.User.is_active = True
+def activar(request, id_especialista):
+    User.objects.get(id=id_especialista).update(is_activate=True)
+    return redirect('nucleo:Portada')

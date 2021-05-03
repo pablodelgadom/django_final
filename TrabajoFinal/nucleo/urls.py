@@ -11,7 +11,6 @@ urlpatterns = [
 
     #Especialistas
 
-    path('especialistas/index', views.especialistaList.as_view(), name="indexEspecialistas"),
     path('especialistas/create', views.especialistaCreate.as_view(), name="crearEspecialistas"),
     path('especialistas/update/<int:pk>', views.especialistaUpdate.as_view(), name="editarEspecialistas"),
     path('especialistas/delete/<int:pk>', views.especialistaDelete.as_view(), name="borrarEspecialistas"),

@@ -1,5 +1,5 @@
 from django import forms
-from nucleo.models import Cliente, User
+from nucleo.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.forms.models import ModelForm
 from django.db import transaction
@@ -24,20 +24,11 @@ class UserCreationFormWithEmail(UserCreationForm):
         return value
 
 
-class StudentSignUpForm(UserCreationForm):
+class ClienteSignUpForm(UserCreationForm):
     interests = forms.ModelMultipleChoiceField
 
     class Meta(UserCreationForm.Meta):
         model = User
-
-    @transaction.atomic
-    def save(self):
-        user = super().save(commit=False)
-        user.is_student = True
-        user.save()
-        student = Cliente.objects.create(user=user)
-        student.interests.add(*self.cleaned_data.get('interests'))
-        return user
 
 
 class UserProfileForm(ModelForm):

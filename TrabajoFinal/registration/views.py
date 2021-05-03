@@ -1,6 +1,6 @@
-from nucleo.forms import clienteForm, especialistaForm
+from nucleo.forms import UserForm
 from nucleo.models import User
-from registration.forms import StudentSignUpForm, UserCreationFormWithEmail, UserProfileForm
+from registration.forms import ClienteSignUpForm, UserCreationFormWithEmail, UserProfileForm
 from django.shortcuts import redirect
 from django.contrib.auth import logout as do_logout
 from django.contrib.auth.signals import user_logged_out
@@ -12,7 +12,7 @@ from django.contrib.auth import login
 # Create your views here.
 
 class SignupView(CreateView):
-    form_class=clienteForm
+    form_class=UserForm
     template_name='registration/registro.html'
 
     def get_success_url(self):
@@ -44,9 +44,9 @@ class UserEditView(UpdateView):
 
 
 
-class StudentSignUpView(CreateView):
+class ClienteSignUpView(CreateView):
     model = User
-    form_class = StudentSignUpForm
+    form_class = UserCreationFormWithEmail
     template_name = 'registration/registro.html'
 
     def get_context_data(self, **kwargs):
@@ -54,6 +54,6 @@ class StudentSignUpView(CreateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('nucleo:Portada')
+            user = form.save()
+            login(self.request, user)
+            return redirect('nucleo:Portada')

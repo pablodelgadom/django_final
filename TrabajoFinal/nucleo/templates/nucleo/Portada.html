@@ -5,6 +5,8 @@
 
 {% if request.user.is_staff %}
 
+{% comment %} <h1>Especialistas</h1> {% endcomment %}
+
 {% if especialistas %}
 <table class="table">
     <thead class="thead-dark">
@@ -19,13 +21,13 @@
     <tbody>
       {% for e in especialistas %}
       <tr>
-        <td>{{ e.nombre }}</td>
+        <td>{{ e.first_name }}</td>
         <td>{{ e.dni }}</td>
         <td>{{ e.direccion }}</td>
         <td>{{ e.fechaNacimiento }}</td>
         <td>
           <a class="btn btn-primary" href="{%url 'nucleo:editarEspecialistas' e.pk %}">Editar</a>
-          <a class="btn btn-danger" href="{%url 'nucleo:borrarEspecialistas' e.pk  %}">Eliminar</a>
+          <a class="btn btn-danger" href="{% url 'nucleo:borrarEspecialistas' e.pk  %}">Eliminar</a>
         </td>
       </tr>
       {% endfor %}
@@ -34,6 +36,8 @@
       <h1>No hay registros de especialistas</h1>
 
       {% endif %}
+
+{% comment %} <h1>Clientes</h1> {% endcomment %}
 
 {% if clientes %}
 <table class="table">
@@ -49,7 +53,7 @@
     <tbody>
       {% for c in clientes %}
       <tr>
-        <td>{{ c.nombre }}</td>
+        <td>{{ c.first_name }}</td>
         <td>{{ c.dni }}</td>
         <td>{{ c.direccion }}</td>
         <td>{{ c.fechaNacimiento }}</td>
