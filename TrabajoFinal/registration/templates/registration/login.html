@@ -3,6 +3,10 @@
 
 {%block contenido %}
 
+{% if 'register' in request.GET%}
+<p style="color: green">Usted se ha registrado correctamente</p>
+{% endif %}
+
 <div class="container">
 <form method="POST">
     {{ form.as_p }}

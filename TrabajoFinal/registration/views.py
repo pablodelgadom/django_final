@@ -1,4 +1,4 @@
-from nucleo.forms import UserForm
+from nucleo.forms import UserForm, clienteForm
 from nucleo.models import User
 from registration.forms import ClienteSignUpForm, UserCreationFormWithEmail, UserProfileForm
 from django.shortcuts import redirect
@@ -12,7 +12,7 @@ from django.contrib.auth import login
 # Create your views here.
 
 class SignupView(CreateView):
-    form_class=UserForm
+    form_class=UserCreationFormWithEmail
     template_name='registration/registro.html'
 
     def get_success_url(self):
@@ -25,7 +25,7 @@ def logout(request):
     messages.info(request, "Salistes exitosamente")
     user_logged_out.connect(show_message)
     # Redireccionamos a la portada
-    return redirect('/')
+    return redirect('/')+'?logout'
 
 
 def show_message(sender, user, request, **kwargs):
@@ -44,16 +44,16 @@ class UserEditView(UpdateView):
 
 
 
-class ClienteSignUpView(CreateView):
-    model = User
-    form_class = UserCreationFormWithEmail
-    template_name = 'registration/registro.html'
+# class ClienteSignUpView(CreateView):
+#     model = User
+#     form_class = UserCreationFormWithEmail
+#     template_name = 'registration/registro.html'
 
-    def get_context_data(self, **kwargs):
-        kwargs['is_cliente'] = True
-        return super().get_context_data(**kwargs)
+#     def get_context_data(self, **kwargs):
+#         kwargs['is_cliente'] = True
+#         return super().get_context_data(**kwargs)
 
-    def form_valid(self, form):
-            user = form.save()
-            login(self.request, user)
-            return redirect('nucleo:Portada')
+#     def form_valid(self, form):
+#             user = form.save()
+#             login(self.request, user)
+#             return redirect('nucleo:Portada')

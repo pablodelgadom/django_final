@@ -35,39 +35,45 @@ class UserForm(forms.ModelForm):
             'nombre': forms.TextInput(attrs={'class':'form-control'}),
             'apellidos': forms.TextInput(attrs={'class':'form-control'}),
             'username': forms.TextInput(attrs={'class':'form-control'}),
-            'password': forms.TextInput(attrs={'class':'form-control'}),
+            'password': forms.PasswordInput(attrs={'class':'form-control'}),
             'direccion': forms.TextInput(attrs={'class':'form-control'}),
         }
 
 
-# class clienteForm(forms.ModelForm):
+class clienteForm(forms.ModelForm):
     
-#     class Meta:
-#         model = Cliente
+    class Meta:
+        model = User
 
-#         fields= [
-#             'dni',
-#             'nombre',
-#             'apellidos',
-#             'direccion',
-#             'fechaNacimiento',
-#             'foto',
-#             'usuario'
-#         ]
-#         labels = {
-#             'dni': 'DNI',
-#             'nombre': 'Nombre',
-#             'apellidos': 'Apellidos',
-#             'direccion': 'Direccion',
-#             'fechaNacimiento': 'Fecha de nacimiento',
-#             'foto': 'Foto',
-#             'biografia': 'Biografia',
-#             'usuario': 'Id de usuario'
-#         }
-#         widgets = {
-#             'dni': forms.TextInput(attrs={'class':'form-control'}), 
-#             'nombre': forms.TextInput(attrs={'class':'form-control'}),
-#             'apellidos': forms.TextInput(attrs={'class':'form-control'}),
-#             'direccion': forms.TextInput(attrs={'class':'form-control'}),
-#             'usuario': forms.Select(attrs={'class':'form-control'}),
-#         }
+        fields= [
+            'dni',
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'password',
+            'direccion',
+            'fechaNacimiento',
+            'biografia',
+            'is_cliente',
+        ]
+        labels = {
+            'dni': 'DNI',
+            'first_name': 'Nombre',
+            'last_name': 'Apellidos',
+            'username' : 'Nombre de usuario',
+            'email' : 'Email',
+            'password' : 'Contraseña',
+            'direccion': 'Direccion',
+            'fechaNacimiento': 'Fecha de nacimiento',
+            'is_cliente' : 'cliente'
+        }
+        widgets = {
+            'dni': forms.TextInput(attrs={'class':'form-control'}), 
+            'nombre': forms.TextInput(attrs={'class':'form-control'}),
+            'apellidos': forms.TextInput(attrs={'class':'form-control'}),
+            'username': forms.TextInput(attrs={'class':'form-control'}),
+            'email': forms.TextInput(attrs={'class':'form-control'}),
+            'password': forms.PasswordInput(attrs={'class':'form-control'}),
+            'direccion': forms.TextInput(attrs={'class':'form-control'}),
+        }

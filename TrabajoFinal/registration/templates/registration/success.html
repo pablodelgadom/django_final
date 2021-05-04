@@ -1,0 +1,11 @@
+{% extends 'nucleo/base.html' %} 
+{% block titulo %} logout {% endblock %}
+
+{%block contenido %}
+
+
+{% if 'logout' in request.GET%}
+<p style="color: green">Ha cerrado sesion correctamente</p>
+{% endif %}
+
+{% endblock %}

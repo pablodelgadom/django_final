@@ -7,6 +7,10 @@
 
 {% comment %} <h1>Especialistas</h1> {% endcomment %}
 
+{% if 'logout' in request.GET%}
+<p style="color: green">Ha cerrado sesion correctamente</p>
+{% endif %}
+
 {% if especialistas %}
 <table class="table">
     <thead class="thead-dark">
