@@ -1,6 +1,6 @@
 from registration.forms import UserCreationFormWithEmail
 from django.http import request
-from nucleo.forms import UserForm
+from nucleo.forms import EditUserForm, UserForm
 from nucleo.models import User
 from django.shortcuts import redirect, render
 from django.views.generic import CreateView,UpdateView,DeleteView
@@ -41,9 +41,9 @@ class especialistaCreate(CreateView):
 def editarEspecialistas(request, id_especialista):
     especialista = User.objects.get(id=id_especialista)
     if request.method == 'GET':
-        form = UserForm(instance=especialista)
+        form = EditUserForm(instance=especialista)
     else:
-        form = UserForm(request.POST, instance=especialista)
+        form = EditUserForm(request.POST, instance=especialista)
         if form.is_valid():
             form.save()
         return redirect('nucleo:Portada')
@@ -51,7 +51,7 @@ def editarEspecialistas(request, id_especialista):
 
 class especialistaUpdate (UpdateView):
     model = User
-    form_class = UserForm
+    form_class = EditUserForm
     template_name = 'nucleo/especialistas/create.html'
     success_url = reverse_lazy('nucleo:Portada')
 
