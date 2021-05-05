@@ -13,7 +13,7 @@ class User(AbstractUser):
     apellidos=models.CharField(max_length=50, null=False, blank=False)
     direccion=models.CharField(max_length=100, null=True, blank=False)
     fechaNacimiento=models.DateField(verbose_name="Fecha de Nacimiento", null=True)
-    biografia=models.CharField(max_length=255, null=True, blank=False)
+    biografia=models.CharField(max_length=255, null=False, blank=False)
     foto=models.ImageField(upload_to='photos/',verbose_name="Foto", null=True)
 
 

@@ -15,4 +15,10 @@ urlpatterns = [
     path('especialistas/update/<int:pk>', views.especialistaUpdate.as_view(), name="editarEspecialistas"),
     path('especialistas/delete/<int:pk>', views.especialistaDelete.as_view(), name="borrarEspecialistas"),
 
+    #Clientes
+
+    path('clientes/delete/<int:pk>', views.clienteDelete.as_view(), name="borrarClientes"),
+
+
+
 ]

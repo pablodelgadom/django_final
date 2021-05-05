@@ -13,12 +13,10 @@ class UserCreationFormWithEmail(UserCreationForm):
     email = forms.EmailField(required=True,help_text="Requerido. 254 caracteres maximo")
     password = forms.PasswordInput(attrs={'class':'form-control'}),
     direccion = forms.TextInput(attrs={'class':'form-control'}),
-    is_cliente = BooleanField()
-   
-    
+
     class Meta:
         model=User
-        fields=('username','email','password1','password2','dni','first_name', 'last_name', 'biografia', 'fechaNacimiento', 'direccion', 'is_cliente')
+        fields=('username','email','password1','password2','dni','first_name', 'last_name', 'fechaNacimiento', 'direccion')
 
     def save(self, commit=True):
         user = super(UserCreationFormWithEmail, self).save()
@@ -26,10 +24,10 @@ class UserCreationFormWithEmail(UserCreationForm):
         user.dni = self.cleaned_data["dni"]
         user.firs_name = self.cleaned_data["first_name"]
         user.last_name = self.cleaned_data["last_name"]
-        user.biografia = self.cleaned_data["biografia"]
         user.fechaNacimiento = self.cleaned_data["fechaNacimiento"]
         user.direccion = self.cleaned_data["direccion"]
-        user.is_cliente = self.cleaned_data["is_cliente"]
+        user.is_cliente = True
+        user.is_active= True
         user.save()
         return
 
@@ -54,7 +52,7 @@ class UserProfileForm(ModelForm):
 
     class Meta:
         model = User
-        fields = 'first_name', 'last_name', 'email', 'username', 'password'
+        fields = 'first_name', 'last_name', 'email', 'username'
         widgets = {
             'first_name': forms.TextInput(
                 attrs={
@@ -76,11 +74,6 @@ class UserProfileForm(ModelForm):
                     'placeholder': 'Ingrese su username',
                 }
             ),
-            'password': forms.PasswordInput(render_value=True,
-                                            attrs={
-                                                'placeholder': 'Ingrese su password',
-                                            }
-                                            ),
         }
         exclude = ['user_permissions', 'last_login', 'date_joined', 'is_superuser', 'is_active', 'is_staff', 'groups']
 

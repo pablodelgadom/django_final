@@ -1,3 +1,4 @@
+from registration.forms import UserCreationFormWithEmail
 from django.http import request
 from nucleo.forms import UserForm
 from nucleo.models import User
@@ -25,7 +26,7 @@ def crearEspecialistas(request):
         form = UserForm(request.POST)
         if form.is_valid():
             form.save()
-        return redirect('especialistas:indexEspecialistas')
+        return redirect('nucleo:Portada')
     else:
         form = UserForm()
 
@@ -56,7 +57,6 @@ class especialistaUpdate (UpdateView):
 
 def borrarEspecialistas(request, id_especialista):
     especialista = User.objects.get(id=id_especialista)
-    
     especialista.delete()
     return redirect('nucleo:Portada')
 
@@ -66,6 +66,21 @@ class especialistaDelete(DeleteView):
     success_url = reverse_lazy('nucleo:Portada')
 
 
-def activar(request, id_especialista):
-    User.objects.get(id=id_especialista).update(is_activate=True)
+
+#Clientes
+
+def borrarClientes(request, id_especialista):
+    especialista = User.objects.get(id=id_especialista)
+    especialista.delete()
+    return redirect('nucleo:Portada')
+
+class clienteDelete(DeleteView):
+    model = User
+    template_name = "nucleo/clientes/delete.html"
+    success_url = reverse_lazy('nucleo:Portada')
+
+
+
+def activar(request, id):
+    User.objects.get(id=id).update(is_activate=True)
     return redirect('nucleo:Portada')
