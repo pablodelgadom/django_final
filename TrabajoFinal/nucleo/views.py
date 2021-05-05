@@ -84,3 +84,8 @@ class clienteDelete(DeleteView):
 def activar(request, id):
     User.objects.get(id=id).update(is_activate=True)
     return redirect('nucleo:Portada')
+
+# class activado(UpdateView,id):
+#     model= User
+#     usuario = User.objects.get(id=id)
+#     usuario.is_active=True

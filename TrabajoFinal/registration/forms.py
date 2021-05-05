@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.fields import BooleanField, FileField
 from nucleo.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms.models import ModelForm
 from django.db import transaction
 
@@ -96,3 +96,10 @@ class UserProfileForm(ModelForm):
         except Exception as e:
             data['error'] = str(e)
         return data
+
+
+
+class EditUserProfileForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields=['username','email','dni','first_name', 'last_name', 'fechaNacimiento', 'direccion']
