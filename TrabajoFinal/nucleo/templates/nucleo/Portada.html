@@ -76,7 +76,7 @@
 
       {% endif %}
 
-{% comment %} {% if citas %}
+{% if citas %}
   <table class="table">
     <caption><a class="btn btn-primary" href="{% url 'nucleo:crearCitas' %}">Añadir citas</a></caption>
       <thead class="thead-dark">
@@ -107,7 +107,7 @@
         {% else %}
         <h1>No hay registros de citas</h1>
 
-{% endif %} {% endcomment %}
+{% endif %}
       
   </tbody>
   </table>
