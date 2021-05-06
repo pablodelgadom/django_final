@@ -20,5 +20,11 @@ urlpatterns = [
     path('clientes/delete/<int:pk>', views.clienteDelete.as_view(), name="borrarClientes"),
 
 
+    #Citas
+
+    path('citas/create', views.citaCreate.as_view(), name="crearCitas"),
+    path('citas/update/<int:pk>', views.citaUpdate.as_view(), name="editarCitas"),
+    path('citas/delete/<int:pk>', views.citaDelete.as_view(), name="borrarCitas"),
+
 
 ]

@@ -1,5 +1,5 @@
 from django.forms import widgets
-from nucleo.models import User
+from nucleo.models import Cita, User
 from django import forms
 
 class UserForm(forms.ModelForm):
@@ -113,4 +113,32 @@ class EditUserForm(forms.ModelForm):
             'username': forms.TextInput(attrs={'class':'form-control'}),
             'password': forms.PasswordInput(attrs={'class':'form-control'}),
             'direccion': forms.TextInput(attrs={'class':'form-control'}),
+        }
+
+
+class CitaForm(forms.ModelForm):
+    
+    class Meta:
+        model = Cita
+
+        fields= [
+            'fecha',
+            'idCliente',
+            'idEspecialista',
+            'informe',
+            'realizada',
+        ]
+        labels = {
+            'fecha':'Fecha',
+            'idCliente':'Cliente',
+            'idEspecialista':'Especialista',
+            'informe':'Informe',
+            'realizada':'Realizada',
+        }
+        widgets = {
+            'fecha': forms.TextInput(attrs={'class':'form-control'}), 
+            'idCliente': forms.Select(attrs={'class':'form-control'}),
+            'idEspecialista': forms.Select(attrs={'class':'form-control'}),
+            'informe': forms.TextInput(attrs={'class':'form-control'}),
+
         }

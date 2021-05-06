@@ -1,7 +1,7 @@
 from registration.forms import UserCreationFormWithEmail
 from django.http import request
-from nucleo.forms import EditUserForm, UserForm
-from nucleo.models import User
+from nucleo.forms import CitaForm, EditUserForm, UserForm
+from nucleo.models import Cita, User
 from django.shortcuts import redirect, render
 from django.views.generic import CreateView,UpdateView,DeleteView
 from django.urls.base import reverse_lazy
@@ -14,8 +14,10 @@ from django.urls.base import reverse_lazy
 def Portada(request):
     cliente=User.objects.filter(is_cliente=True)#.filter(is_activate=False)
     especialista=User.objects.filter(is_especialista=True)
+    cita=Cita.objects.all()
     context={'especialistas':especialista,
-    'clientes':cliente}
+    'clientes':cliente,
+    'citas':cita}
     return render(request, 'nucleo/Portada.html',context)
 
 
@@ -78,6 +80,55 @@ class clienteDelete(DeleteView):
     model = User
     template_name = "nucleo/clientes/delete.html"
     success_url = reverse_lazy('nucleo:Portada')
+
+
+#Citas
+
+def crearCitas(request):
+    if request.method == 'POST':
+        form = CitaForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('nucleo:Portada')
+    else:
+        form = UserForm()
+
+    return render(request, 'nucleo/citas/create.html', {'form':form})
+
+class citaCreate(CreateView):
+    model = Cita
+    form_class = CitaForm
+    template_name = 'nucleo/citas/create.html'
+    success_url = reverse_lazy('nucleo:Portada')
+
+
+def editarCitas(request, id_cita):
+    cita = Cita.objects.get(id=id_cita)
+    if request.method == 'GET':
+        form = EditUserForm(instance=cita)
+    else:
+        form = CitaForm(request.POST, instance=cita)
+        if form.is_valid():
+            form.save()
+        return redirect('nucleo:Portada')
+    return render(request, 'nucleo/citas/create.html', {'form':form})
+
+class citaUpdate(UpdateView):
+    model = Cita
+    form_class = CitaForm
+    template_name = 'nucleo/citas/create.html'
+    success_url = reverse_lazy('nucleo:Portada')
+
+def borrarCitas(request, id_cita):
+    cita = Cita.objects.get(id=id_cita)
+    cita.delete()
+    return redirect('nucleo:Portada')
+
+class citaDelete(DeleteView):
+    model = Cita
+    template_name = "nucleo/citas/delete.html"
+    success_url = reverse_lazy('nucleo:Portada')
+
 
 
 

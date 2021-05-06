@@ -1,0 +1,12 @@
+{% extends 'nucleo/base.html' %} 
+{% block titulo %} Citas {% endblock %}
+
+{%block contenido %}
+
+<form method="post">
+    {% csrf_token %}
+    <input type="submit" value="Borrar cita">
+</form>
+
+
+{% endblock %}
