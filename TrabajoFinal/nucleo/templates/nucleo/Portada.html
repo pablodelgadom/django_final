@@ -5,11 +5,6 @@
 
 {% if request.user.is_staff %}
 
-
-{% if 'logout' in request.GET%}
-<p style="color: green">Ha cerrado sesion correctamente</p>
-{% endif %}
-
 {% if especialistas %}
 <table class="table">
   <caption><a class="btn btn-primary" href="{% url 'nucleo:crearEspecialistas' %}">Añadir especialistas</a></caption>
@@ -35,8 +30,6 @@
         </td>
       </tr>
       {% endfor %}
-
-      
 
       {% else %}
       <h1>No hay registros de especialistas</h1>
@@ -76,9 +69,42 @@
 
       {% endif %}
 
+{% if request.user.is_cliente %}
+
+<a class="btn btn-primary" href="{% url 'nucleo:historial' request.user.id %}">Historial</a>
+
+{% if especialistas %}
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">DNI</th>
+        <th scope="col">Direccion</th>
+        <th scope="col">Fecha de nacimiento</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in especialistas %}
+      <tr>
+        <td>{{ e.first_name }}</td>
+        <td>{{ e.dni }}</td>
+        <td>{{ e.direccion }}</td>
+        <td>{{ e.fechaNacimiento }}</td>
+        <td>
+          <a class="btn btn-primary" href="{% url 'nucleo:crearCitas' %}">Solicitar cita</a>
+        </td>
+      </tr>
+      {% endfor %}
+
+      {% else %}
+      <h1>No hay registros de especialistas</h1>
+
+      {% endif %}
+
 {% if citas %}
   <table class="table">
-    <caption><a class="btn btn-primary" href="{% url 'nucleo:crearCitas' %}">Añadir citas</a></caption>
+    <caption><a class="btn btn-primary" href="{% url 'nucleo:crearCitas' %}">Crear citas</a></caption>
       <thead class="thead-dark">
         <tr>
           <th scope="col">Fecha</th>
@@ -108,7 +134,40 @@
         <h1>No hay registros de citas</h1>
 
 {% endif %}
+
+{% endif %}
+
+{% if request.user.is_especialista %}
+
+{% if clientes %}
+<table class="table">
+  <caption><a class="btn btn-primary">Clientes</a></caption>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">DNI</th>
+        <th scope="col">Direccion</th>
+        <th scope="col">Fecha de nacimiento</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in clientes %}
+      <tr>
+        <td>{{ c.first_name }}</td>
+        <td>{{ c.dni }}</td>
+        <td>{{ c.direccion }}</td>
+        <td>{{ c.fechaNacimiento }}</td>
+        <td><a class="btn btn-primary" href="{% url 'nucleo:historial' c.pk  %}">Ver historial</a></td>
+      </tr>
+      {% endfor %}
       
+      {% else %}
+      <h1>No hay registros de clientes</h1>
+
+      {% endif %}
+
+      {% endif %}
   </tbody>
   </table>
 

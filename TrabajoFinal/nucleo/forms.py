@@ -1,4 +1,5 @@
 from django.forms import widgets
+from django.http import request
 from nucleo.models import Cita, User
 from django import forms
 
@@ -120,7 +121,7 @@ class CitaForm(forms.ModelForm):
     
     class Meta:
         model = Cita
-
+        
         fields= [
             'fecha',
             'idCliente',

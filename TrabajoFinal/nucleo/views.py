@@ -1,10 +1,13 @@
+from nucleo.decorators import cliente_required, especialista_required
 from registration.forms import UserCreationFormWithEmail
 from django.http import request
 from nucleo.forms import CitaForm, EditUserForm, UserForm
 from nucleo.models import Cita, User
-from django.shortcuts import redirect, render
-from django.views.generic import CreateView,UpdateView,DeleteView
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import CreateView,UpdateView,DeleteView,ListView
 from django.urls.base import reverse_lazy
+from nucleo.decorators import cliente_required, especialista_required
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 
@@ -101,6 +104,10 @@ class citaCreate(CreateView):
     template_name = 'nucleo/citas/create.html'
     success_url = reverse_lazy('nucleo:Portada')
 
+    @method_decorator(cliente_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
 
 def editarCitas(request, id_cita):
     cita = Cita.objects.get(id=id_cita)
@@ -119,6 +126,10 @@ class citaUpdate(UpdateView):
     template_name = 'nucleo/citas/create.html'
     success_url = reverse_lazy('nucleo:Portada')
 
+    @method_decorator(cliente_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
 def borrarCitas(request, id_cita):
     cita = Cita.objects.get(id=id_cita)
     cita.delete()
@@ -129,14 +140,16 @@ class citaDelete(DeleteView):
     template_name = "nucleo/citas/delete.html"
     success_url = reverse_lazy('nucleo:Portada')
 
+    @method_decorator(cliente_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
 
+def historial(request, pk):
+    cita=Cita.objects.filter(idCliente=pk)
+    context={'citas':cita}
+    return render(request, 'nucleo/citas/historial.html',context)
 
-def activar(request, id):
-    User.objects.get(id=id).update(is_activate=True)
-    return redirect('nucleo:Portada')
-
-# class activado(UpdateView,id):
-#     model= User
-#     usuario = User.objects.get(id=id)
-#     usuario.is_active=True
+# def activar(request, id):
+#     User.objects.get(id=id).update(is_activate=True)
+#     return redirect('nucleo:Portada')

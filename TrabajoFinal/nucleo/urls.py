@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from nucleo import views
+from nucleo.decorators import cliente_required
 
 app_name = "nucleo"
 
@@ -22,6 +23,7 @@ urlpatterns = [
 
     #Citas
 
+    path('citas/historial/<int:pk>', views.historial, name="historial"),
     path('citas/create', views.citaCreate.as_view(), name="crearCitas"),
     path('citas/update/<int:pk>', views.citaUpdate.as_view(), name="editarCitas"),
     path('citas/delete/<int:pk>', views.citaDelete.as_view(), name="borrarCitas"),
