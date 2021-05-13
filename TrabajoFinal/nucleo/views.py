@@ -17,7 +17,7 @@ from django.utils.decorators import method_decorator
 def Portada(request):
     cliente=User.objects.filter(is_cliente=True)#.filter(is_activate=False)
     especialista=User.objects.filter(is_especialista=True)
-    cita=Cita.objects.all()
+    cita=Cita.objects.filter(realizada=False)
     context={'especialistas':especialista,
     'clientes':cliente,
     'citas':cita}
@@ -146,7 +146,7 @@ class citaDelete(DeleteView):
 
 
 def historial(request, pk):
-    cita=Cita.objects.filter(idCliente=pk)
+    cita=Cita.objects.filter(idCliente=pk).filter(realizada=True)
     context={'citas':cita}
     return render(request, 'nucleo/citas/historial.html',context)
 
