@@ -1,3 +1,4 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from nucleo.decorators import cliente_required, especialista_required
 from registration.forms import UserCreationFormWithEmail
 from django.http import request
@@ -37,6 +38,7 @@ def crearEspecialistas(request):
 
     return render(request, 'nucleo/especialistas/create.html', {'form':form})
 
+@method_decorator(staff_member_required, name='dispatch')
 class especialistaCreate(CreateView):
     model = User
     form_class = UserForm
@@ -54,6 +56,7 @@ def editarEspecialistas(request, id_especialista):
         return redirect('nucleo:Portada')
     return render(request, 'nucleo/especialistas/create.html', {'form':form})
 
+@method_decorator(staff_member_required, name='dispatch')
 class especialistaUpdate (UpdateView):
     model = User
     form_class = EditUserForm
@@ -65,6 +68,7 @@ def borrarEspecialistas(request, id_especialista):
     especialista.delete()
     return redirect('nucleo:Portada')
 
+@method_decorator(staff_member_required, name='dispatch')
 class especialistaDelete(DeleteView):
     model = User
     template_name = "nucleo/especialistas/delete.html"
@@ -79,6 +83,7 @@ def borrarClientes(request, id_especialista):
     especialista.delete()
     return redirect('nucleo:Portada')
 
+@method_decorator(staff_member_required, name='dispatch')
 class clienteDelete(DeleteView):
     model = User
     template_name = "nucleo/clientes/delete.html"
@@ -144,9 +149,15 @@ class citaDelete(DeleteView):
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-
-def historial(request, pk):
+@cliente_required
+def historialC(request, pk):
     cita=Cita.objects.filter(idCliente=pk).filter(realizada=True)
+    context={'citas':cita}
+    return render(request, 'nucleo/citas/historial.html',context)
+
+@especialista_required
+def historialE(request, pk):
+    cita=Cita.objects.filter(idCliente=pk).filter(idEspecialista=request.user.id).filter(realizada=True)
     context={'citas':cita}
     return render(request, 'nucleo/citas/historial.html',context)
 

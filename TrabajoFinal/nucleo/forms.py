@@ -118,6 +118,11 @@ class EditUserForm(forms.ModelForm):
 
 
 class CitaForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(CitaForm, self).__init__(*args, **kwargs)
+        self.fields['idEspecialista'].queryset =  User.objects.filter(is_especialista=True)
+        # self.fileds['idCliente'].queryset =  User.objects.filter(user=self.request.user)
     
     class Meta:
         model = Cita
@@ -141,5 +146,4 @@ class CitaForm(forms.ModelForm):
             'idCliente': forms.Select(attrs={'class':'form-control'}),
             'idEspecialista': forms.Select(attrs={'class':'form-control'}),
             'informe': forms.TextInput(attrs={'class':'form-control'}),
-
         }

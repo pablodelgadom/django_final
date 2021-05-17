@@ -71,7 +71,7 @@
 
 {% if request.user.is_cliente %}
 
-<a class="btn btn-primary" href="{% url 'nucleo:historial' request.user.id %}">Historial</a>
+<a class="btn btn-primary" href="{% url 'nucleo:historialC' request.user.id %}">Historial</a>
 
 {% if especialistas %}
 <table class="table">
@@ -158,7 +158,7 @@
         <td>{{ c.dni }}</td>
         <td>{{ c.direccion }}</td>
         <td>{{ c.fechaNacimiento }}</td>
-        <td><a class="btn btn-primary" href="{% url 'nucleo:historial' c.pk  %}">Ver historial</a></td>
+        <td><a class="btn btn-primary" href="{% url 'nucleo:historialE' c.pk  %}">Ver historial</a></td>
       </tr>
       {% endfor %}
       
