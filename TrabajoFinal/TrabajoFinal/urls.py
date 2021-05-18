@@ -17,6 +17,8 @@ from django import urls
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     #url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
@@ -24,4 +26,4 @@ urlpatterns = [
     path('accounts/',include('django.contrib.auth.urls')),
     path('accounts/',include('registration.urls')),
     path('',include('nucleo.urls')),
-]
+]+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

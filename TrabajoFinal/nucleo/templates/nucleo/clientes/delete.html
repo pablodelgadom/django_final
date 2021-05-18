@@ -3,6 +3,8 @@
 
 {%block contenido %}
 
+<h2> ¿Esta seguro de que desea borrar el cliente? </h2>
+
 <form method="post">
     {% csrf_token %}
     <input type="submit" value="Borrar cliente">

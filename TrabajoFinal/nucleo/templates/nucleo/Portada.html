@@ -3,7 +3,24 @@
 
 {%block contenido %}
 
+{% load static %}
+<img src="{%static 'img/Portada.png' %}"/>
 
+</br>
+</br>
+<div id="contenido-principal">
+<h2>Bienvenido a la web de Yo te ayudo</h2>
+</div>
+</br>
+
+{% if request.user is not request.user.is_authenticated %}
+
+{% comment %} <div id="contenido-principal">
+<h2>Registrese para optar de todas las funcionalidades que te ofrece nuestra pagina web</h2>
+</div> {% endcomment %}
+</br>
+
+{% endif %}
 
 {% if request.user.is_staff %}
 
@@ -73,7 +90,10 @@
 
 {% if request.user.is_cliente %}
 
-<a class="btn btn-primary" href="{% url 'nucleo:historialC' request.user.id %}">Historial</a>
+</br>
+<div>
+<h2> Especialistas disponibles </h2>
+</div>
 
 {% if especialistas %}
 <table class="table">
@@ -104,46 +124,37 @@
 
       {% endif %}
 
-{% if citas %}
-  <table class="table">
-    <caption><a class="btn btn-primary" href="{% url 'nucleo:crearCitas' %}">Crear citas</a></caption>
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">Fecha</th>
-          <th scope="col">Informe</th>
-          <th scope="col">Realizada</th>
-          <th scope="col">Cliente</th>
-          <th scope="col">Especialistas</th>
-          <th scope="col">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for ci in citas %}
-        <tr>
-          <td>{{ ci.fecha }}</td>
-          <td>{{ ci.informe }}</td>
-          <td>{{ ci.realizada }}</td>
-          <td>{{ ci.idCliente }}</td>
-          <td>{{ ci.idEspecialista }}</td>
-          <td>
-          <a class="btn btn-primary" href="{%url 'nucleo:editarCitas' ci.pk %}">Editar</a>
-          <a class="btn btn-danger" href="{% url 'nucleo:borrarCitas' ci.pk  %}">Eliminar</a>
-          </td>
-        </tr>
-        {% endfor %}
-        
-        {% else %}
-        <h1>No hay registros de citas</h1>
+  </tbody>
+  </table>
 
-{% endif %}
+<br>
+<div>
+<h2> ¿Desea ver su historial? </h2>
+</br>
+</div>
 
+
+<a class="btn btn-primary" href="{% url 'nucleo:historialC' request.user.id %}">Historial</a>
+
+</br>
+</br>
+</br>
+
+<div>
+<h2> ¿Desea ver sus citas pendientes? </h2>
+
+</br>
+
+<a class="btn btn-primary" href="{% url 'nucleo:CRUD' request.user.id %}">Citas pendientes</a>
+</div>
 {% endif %}
 
 {% if request.user.is_especialista %}
 
+<h2> Clientes </h2>
+
 {% if clientes %}
 <table class="table">
-  <caption><a class="btn btn-primary">Clientes</a></caption>
     <thead class="thead-dark">
       <tr>
         <th scope="col">Nombre</th>
@@ -160,7 +171,7 @@
         <td>{{ c.dni }}</td>
         <td>{{ c.direccion }}</td>
         <td>{{ c.fechaNacimiento }}</td>
-        <td><a class="btn btn-primary" href="{% url 'nucleo:historialE' c.pk  %}">Ver historial</a></td>
+        <td><a class="btn btn-primary" href="{% url 'nucleo:historialE' c.pk  %}">Ver historial de {{c.first_name}}</a></td>
       </tr>
       {% endfor %}
       

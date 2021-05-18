@@ -3,9 +3,11 @@
 
 {%block contenido %}
 
+<h2> ¿Esta seguro de que desea borrar la cita? </h2>
+
 <form method="post">
     {% csrf_token %}
-    <input type="submit" value="Borrar cita">
+    <input type="submit" class="btn btn-danger" value="Borrar cita">
 </form>
 
 
