@@ -4,23 +4,14 @@
 {%block contenido %}
 
 {% load static %}
+<div id="contenido-principal">
 <img src="{%static 'img/Portada.png' %}"/>
-
+</div>
 </br>
 </br>
 <div id="contenido-principal">
-<h2>Bienvenido a la web de Yo te ayudo</h2>
+<h5>Bienvenido a la web de Yo te ayudo</h5>
 </div>
-</br>
-
-{% if request.user is not request.user.is_authenticated %}
-
-{% comment %} <div id="contenido-principal">
-<h2>Registrese para optar de todas las funcionalidades que te ofrece nuestra pagina web</h2>
-</div> {% endcomment %}
-</br>
-
-{% endif %}
 
 {% if request.user.is_staff %}
 
@@ -90,10 +81,6 @@
 
 {% if request.user.is_cliente %}
 
-</br>
-<div>
-<h2> Especialistas disponibles </h2>
-</div>
 
 {% if especialistas %}
 <table class="table">
@@ -127,25 +114,25 @@
   </tbody>
   </table>
 
-<br>
-<div>
-<h2> ¿Desea ver su historial? </h2>
-</br>
-</div>
 
+<div id="contenido-principal">
+
+
+<div>
+<p> ¿Desea ver su historial? </p>
 
 <a class="btn btn-primary" href="{% url 'nucleo:historialC' request.user.id %}">Historial</a>
+</div>
 
-</br>
-</br>
 </br>
 
 <div>
-<h2> ¿Desea ver sus citas pendientes? </h2>
+<p> ¿Desea ver sus citas pendientes? </p>
 
-</br>
 
 <a class="btn btn-primary" href="{% url 'nucleo:CRUD' request.user.id %}">Citas pendientes</a>
+</div>
+
 </div>
 {% endif %}
 
