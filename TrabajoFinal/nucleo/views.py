@@ -165,7 +165,7 @@ def historialE(request, pk):
 def CRUD(request, pk):
     cita=Cita.objects.filter(idCliente=pk).filter(realizada=False)
     context={'citas':cita}
-    return render(request, 'nucleo/citas/historial.html',context)
+    return render(request, 'nucleo/citas/pendientes.html',context)
 
 # def activar(request, id):
 #     User.objects.get(id=id).update(is_activate=True)
