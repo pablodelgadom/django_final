@@ -1,3 +1,4 @@
+from datetime import date
 from django.forms import widgets
 from django.http import request
 from nucleo.models import Cita, User
@@ -147,3 +148,4 @@ class CitaForm(forms.ModelForm):
             'idEspecialista': forms.Select(attrs={'class':'form-control'}),
             'informe': forms.TextInput(attrs={'class':'form-control'}),
         }
+

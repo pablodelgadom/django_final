@@ -23,6 +23,7 @@ urlpatterns = [
 
     #Citas
 
+    path('citas/hoy/<int:pk>', views.hoy, name="hoy"),
     path('citas/pendientes/<int:pk>', views.CRUD, name="CRUD"),
     path('citas/historial/<int:pk>', views.historialC, name="historialC"),
     path('citas/historialE/<int:pk>', views.historialE, name="historialE"),

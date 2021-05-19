@@ -3,15 +3,7 @@
 
 {%block contenido %}
 
-{% load static %}
-<div id="contenido-principal">
-<img src="{%static 'img/Portada.png' %}"/>
-</div>
-</br>
-</br>
-<div id="contenido-principal">
-<h1>Bienvenido a la web de Yo te ayudo</h1>
-</div>
+
 
 {% if request.user.is_staff %}
 
@@ -166,9 +158,16 @@
       <h1>No hay registros de clientes</h1>
 
       {% endif %}
-
-      {% endif %}
-  </tbody>
+    </tbody>
   </table>
+
+{% comment %} <div>
+<h5> ¿Desea ver sus citas para hoy? </h5>
+
+<a class="btn btn-primary" href="{% url 'nucleo:hoy' request.user.id %}">Citas hoy</a>
+</div> {% endcomment %}
+
+
+{% endif %}
 
 {% endblock %}

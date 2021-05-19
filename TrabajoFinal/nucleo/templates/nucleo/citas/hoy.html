@@ -1,0 +1,42 @@
+{% extends 'nucleo/base.html' %} 
+{% block titulo %} Pendientes {% endblock %}
+
+{%block contenido %}
+
+
+{% if citas %}
+  <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Fecha</th>
+          <th scope="col">Informe</th>
+          <th scope="col">Realizada</th>
+          <th scope="col">Cliente</th>
+          <th scope="col">Especialista</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ci in citas %}
+        <tr>
+          <td>{{ ci.fecha }}</td>
+          <td>{{ ci.informe }}</td>
+          <td>{{ ci.realizada }}</td>
+          <td>{{ ci.idCliente }}</td>
+          <td>{{ ci.idEspecialista }}</td>
+          <td>
+          <a class="btn btn-primary" href="{%url 'nucleo:editarCitas' ci.pk %}">Editar</a>
+          <a class="btn btn-danger" href="{% url 'nucleo:borrarCitas' ci.pk  %}">Eliminar</a>
+          </td>
+        </tr>
+        {% endfor %}
+        
+        {% else %}
+        <h1>No hay registros de citas</h1>
+
+     {% endif %}
+
+  </tbody>
+  </table>
+
+{% endblock %}

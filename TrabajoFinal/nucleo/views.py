@@ -9,6 +9,7 @@ from django.views.generic import CreateView,UpdateView,DeleteView,ListView
 from django.urls.base import reverse_lazy
 from nucleo.decorators import cliente_required, especialista_required
 from django.utils.decorators import method_decorator
+import datetime
 
 # Create your views here.
 
@@ -166,6 +167,12 @@ def CRUD(request, pk):
     cita=Cita.objects.filter(idCliente=pk).filter(realizada=False)
     context={'citas':cita}
     return render(request, 'nucleo/citas/pendientes.html',context)
+
+@especialista_required
+def hoy(request, pk):
+    cita=Cita.objects.filter(idCliente=pk).filter(realizada=False).filter(fecha=datetime.date.today())
+    context={'citas':cita}
+    return render(request, 'nucleo/citas/hoy.html',context)
 
 # def activar(request, id):
 #     User.objects.get(id=id).update(is_activate=True)
