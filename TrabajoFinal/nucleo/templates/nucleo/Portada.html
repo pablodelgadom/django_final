@@ -69,7 +69,7 @@
 
       {% endif %}
 
-      {% endif %}
+{% endif %}
 
 {% if request.user.is_cliente %}
 
@@ -161,13 +161,12 @@
     </tbody>
   </table>
 
-{% comment %} <div>
+{% endif %}
+
+<div>
 <h5> ¿Desea ver sus citas para hoy? </h5>
 
 <a class="btn btn-primary" href="{% url 'nucleo:hoy' request.user.id %}">Citas hoy</a>
-</div> {% endcomment %}
-
-
-{% endif %}
+</div>
 
 {% endblock %}

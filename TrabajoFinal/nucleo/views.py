@@ -173,7 +173,3 @@ def hoy(request, pk):
     cita=Cita.objects.filter(idCliente=pk).filter(realizada=False).filter(fecha=datetime.date.today())
     context={'citas':cita}
     return render(request, 'nucleo/citas/hoy.html',context)
-
-# def activar(request, id):
-#     User.objects.get(id=id).update(is_activate=True)
-#     return redirect('nucleo:Portada')
