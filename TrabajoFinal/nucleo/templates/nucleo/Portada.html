@@ -8,7 +8,7 @@
 {% if request.user.is_staff %}
 
 {% if especialistas %}
-<table class="table">
+<table class="table" id="body">
   <caption><a class="btn btn-primary" href="{% url 'nucleo:crearEspecialistas' %}">Añadir especialistas</a></caption>
     <thead class="thead-dark">
       <tr>
@@ -163,10 +163,10 @@
 
 {% endif %}
 
-<div>
+{% comment %} <div>
 <h5> ¿Desea ver sus citas para hoy? </h5>
 
 <a class="btn btn-primary" href="{% url 'nucleo:hoy' request.user.id %}">Citas hoy</a>
-</div>
+</div> {% endcomment %}
 
 {% endblock %}

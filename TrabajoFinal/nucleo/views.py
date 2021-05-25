@@ -1,11 +1,10 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from nucleo.decorators import cliente_required, especialista_required
-from registration.forms import UserCreationFormWithEmail
 from django.http import request
-from nucleo.forms import CitaForm, EditUserForm, UserForm
+from nucleo.forms import CitaForm, CitaUpdateForm, EditUserForm, UserForm
 from nucleo.models import Cita, User
-from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import CreateView,UpdateView,DeleteView,ListView
+from django.shortcuts import redirect, render
+from django.views.generic import CreateView,UpdateView,DeleteView
 from django.urls.base import reverse_lazy
 from nucleo.decorators import cliente_required, especialista_required
 from django.utils.decorators import method_decorator
@@ -132,9 +131,26 @@ class citaUpdate(UpdateView):
     template_name = 'nucleo/citas/create.html'
     success_url = reverse_lazy('nucleo:Portada')
 
-    @method_decorator(cliente_required)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+
+
+
+def editarCitasE(request, id_cita):
+    cita = Cita.objects.get(id=id_cita)
+    if request.method == 'GET':
+        form = EditUserForm(instance=cita)
+    else:
+        form = CitaUpdateForm(request.POST, instance=cita)
+        if form.is_valid():
+            form.save()
+        return redirect('nucleo:Portada')
+    return render(request, 'nucleo/citas/create.html', {'form':form})
+
+class citaUpdateE(UpdateView):
+    model = Cita
+    form_class = CitaUpdateForm
+    template_name = 'nucleo/citas/create.html'
+    success_url = reverse_lazy('nucleo:Portada')
+
 
 def borrarCitas(request, id_cita):
     cita = Cita.objects.get(id=id_cita)
@@ -170,6 +186,6 @@ def CRUD(request, pk):
 
 @especialista_required
 def hoy(request, pk):
-    cita=Cita.objects.filter(idCliente=pk).filter(realizada=False).filter(fecha=datetime.date.today())
+    cita=Cita.objects.filter(idEspecialista=pk).filter(fecha=datetime.date.today())
     context={'citas':cita}
     return render(request, 'nucleo/citas/hoy.html',context)

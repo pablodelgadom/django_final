@@ -29,6 +29,7 @@ urlpatterns = [
     path('citas/historialE/<int:pk>', views.historialE, name="historialE"),
     path('citas/create', views.citaCreate.as_view(), name="crearCitas"),
     path('citas/update/<int:pk>', views.citaUpdate.as_view(), name="editarCitas"),
+    path('citas/update/<int:pk>/E', views.citaUpdateE.as_view(), name="editarCitasE"),
     path('citas/delete/<int:pk>', views.citaDelete.as_view(), name="borrarCitas"),
 
 
