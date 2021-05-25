@@ -56,7 +56,7 @@ class Cita(models.Model):
     fecha=models.DateField(verbose_name="Fecha", null=False)
     idCliente=models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="Cliente")
     idEspecialista=models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="Especilaista")
-    informe=models.TextField(null=False, blank=False)
+    informe=models.TextField(null=True, blank=False)
     realizada=models.BooleanField(null=False, blank=False)
 
     class Meta:
