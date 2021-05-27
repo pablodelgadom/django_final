@@ -41,6 +41,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
+        
           <ul class="navbar-nav ml-auto">
           {% if not user.is_authenticated %}
             <li class="nav-item active">
@@ -56,6 +57,11 @@
               <a class="nav-link" href="{% url 'registro' %}">Registrarse</a>
             </li>
             {% else %}
+              <nav><ul>
+                <li class="nav-item"><a class="nav-link">mensajeria</a>
+                <ul><li class="nav-item"><a class="nav-link" href="{% url 'nucleo:crearMensajes' %}">Enviar mensaje</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'nucleo:recibidos' request.user.id %}">Mensajes recibidos</a></li>
+              </ul></nav>
             <li class="nav-item">
               <a class="nav-link">Usted ha iniciado sesion como {{request.user.username}}</a>
             </li>

@@ -1,0 +1,49 @@
+{% extends 'nucleo/base.html' %} 
+{% block titulo %} Pendientes {% endblock %}
+
+{%block contenido %}
+
+
+{% if mensajes %}
+  <table class="table">
+        <thead class="thead-dark">
+            <tr>
+            <th scope="col">idEmisor</th>
+            <th scope="col">fecha</th>
+            <th scope="col">asunto</th>
+            <th scope="col">texto</th>
+            <th scope="col">leido </th>
+            <th scope="col">Acciones </th>
+            </tr>
+        </thead>
+    <tbody>
+    {% for e in mensajes %}
+            <tr>
+            <td>{{ e.idEmisor }}</td>
+            <td>{{ e.fecha }}</td>
+            <td>{{ e.asunto }}</td>
+            <td>{{ e.texto }}</td>
+            {% if e.leido == True %}
+                {% load static %}
+                <td>&#128077;</td>
+            {% else %}
+                {% load static %}
+                <td>&#128078;</td>
+                <td><a class="btn btn-primary" href="{%url 'nucleo:editarMensajes' e.pk %}">Marcar como leido</a></td>
+            {% endif %}
+            
+            </tr>
+        {% endfor %}
+        
+        {% else %}
+        <h1>No hay registros de citas</h1>
+
+     {% endif %}
+
+  </tbody>
+  </table>
+
+{% endblock %}
+
+
+

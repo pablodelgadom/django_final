@@ -1,9 +1,11 @@
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
+from django.views.generic.detail import DetailView
 from nucleo.decorators import cliente_required, especialista_required
 from django.http import request
-from nucleo.forms import CitaForm, CitaUpdateForm, EditUserForm, UserForm
-from nucleo.models import Cita, User
-from django.shortcuts import redirect, render
+from nucleo.forms import CitaForm, CitaUpdateForm, EditUserForm, LeidoForm, MensajeForm, UserForm
+from nucleo.models import Cita, Mensaje, User
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView,UpdateView,DeleteView
 from django.urls.base import reverse_lazy
 from nucleo.decorators import cliente_required, especialista_required
@@ -132,8 +134,6 @@ class citaUpdate(UpdateView):
     success_url = reverse_lazy('nucleo:Portada')
 
 
-
-
 def editarCitasE(request, id_cita):
     cita = Cita.objects.get(id=id_cita)
     if request.method == 'GET':
@@ -166,6 +166,62 @@ class citaDelete(DeleteView):
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
+
+    #Mensajes
+
+def crearMensaje(request):
+    if request.method == 'POST':
+        form = MensajeForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('nucleo:Portada')
+    else:
+        form = MensajeForm(request.user)
+
+    return render(request, 'nucleo/mensajes/create.html', {'form':form})
+
+
+@method_decorator(login_required, name='dispatch')
+class mensajeCreate(CreateView):
+    model = Mensaje
+    form_class = MensajeForm
+    template_name = 'nucleo/mensajes/create.html'
+    success_url = reverse_lazy('nucleo:Portada')
+
+
+def editarMensaje(request, id_mensaje):
+    mensaje = Mensaje.objects.get(id=id_mensaje)
+    if request.method == 'GET':
+        form = LeidoForm(instance=mensaje)
+    else:
+        form = LeidoForm(request.POST, instance=mensaje)
+        if form.is_valid():
+            form.save()
+        return redirect('nucleo:Portada')
+    return render(request, 'nucleo/mensajes/create.html', {'form':form})
+
+class mensajeUpdate(UpdateView):
+    model = Mensaje
+    form_class = LeidoForm
+    template_name = 'nucleo/mensajes/create.html'
+    success_url = reverse_lazy('nucleo:Portada')
+
+
+# class MensajeDetailView(DetailView):
+
+#     model = Mensaje
+
+#     def get(self, request, *args, **kwargs):
+#         mensaje = get_object_or_404(Mensaje, pk=kwargs['pk'])
+#         context = {'mensajes': mensaje}
+#         return render(request, 'books/book_detail.html', context)
+
+
+def recibidos(request, pk):
+    mensaje=Mensaje.objects.filter(idReceptor=pk)
+    context={'mensajes':mensaje}
+    return render(request, 'nucleo/mensajes/recibidos.html',context)
+
 @cliente_required
 def historialC(request, pk):
     cita=Cita.objects.filter(idCliente=pk).filter(realizada=True)
@@ -183,6 +239,12 @@ def CRUD(request, pk):
     cita=Cita.objects.filter(idCliente=pk).filter(realizada=False)
     context={'citas':cita}
     return render(request, 'nucleo/citas/pendientes.html',context)
+
+@especialista_required
+def pendientes(request, pk):
+    cita=Cita.objects.filter(idEspecialista=pk).filter(realizada=False)
+    context={'citas':cita}
+    return render(request, 'nucleo/citas/updateE.html',context)
 
 @especialista_required
 def hoy(request, pk):

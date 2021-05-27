@@ -25,6 +25,7 @@ urlpatterns = [
 
     path('citas/hoy/<int:pk>', views.hoy, name="hoy"),
     path('citas/pendientes/<int:pk>', views.CRUD, name="CRUD"),
+    path('citas/updateE/<int:pk>', views.pendientes, name="pendientes"),
     path('citas/historial/<int:pk>', views.historialC, name="historialC"),
     path('citas/historialE/<int:pk>', views.historialE, name="historialE"),
     path('citas/create', views.citaCreate.as_view(), name="crearCitas"),
@@ -32,5 +33,12 @@ urlpatterns = [
     path('citas/update/<int:pk>/E', views.citaUpdateE.as_view(), name="editarCitasE"),
     path('citas/delete/<int:pk>', views.citaDelete.as_view(), name="borrarCitas"),
 
+
+    #Mensajes
+
+    path('mensajes/create', views.mensajeCreate.as_view(), name="crearMensajes"),
+    path('mensajes/recibidos/<int:pk>', views.recibidos, name="recibidos"),
+    # path('mensaje/<int:id>', views.MensajeDetailView.as_view(), name='mensajeDetail'),
+    path('mensajes/update/<int:pk>', views.mensajeUpdate.as_view(), name="editarMensajes"),
 
 ]

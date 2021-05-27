@@ -133,7 +133,7 @@
 <h2> Clientes </h2>
 
 {% if clientes %}
-<table class="table">
+<table class="table" bgcolor="Silver">
     <thead class="thead-dark">
       <tr>
         <th scope="col">Nombre</th>
@@ -161,12 +161,25 @@
     </tbody>
   </table>
 
-{% endif %}
+<h2> Citas pendientes </h2>
 
-{% comment %} <div>
+<a class="btn btn-primary" href="{% url 'nucleo:pendientes' request.user.id %}">Citas pendientes</a>
+
+<div>
+<br>
 <h5> ¿Desea ver sus citas para hoy? </h5>
 
 <a class="btn btn-primary" href="{% url 'nucleo:hoy' request.user.id %}">Citas hoy</a>
-</div> {% endcomment %}
+</div>
+<br>
+
+{% endif %}
+
+
+
+{% comment %} <h5><font face="Times New Roman">Mensajes</font></h5>
+
+<a class="btn btn-primary" href="{% url 'nucleo:hoy' request.user.id %}">Mensajes</a> {% endcomment %}
+</div>
 
 {% endblock %}

@@ -1,7 +1,7 @@
 from datetime import date
 from django.forms import widgets
 from django.http import request
-from nucleo.models import Cita, User
+from nucleo.models import Cita, Mensaje, User
 from django import forms
 
 class UserForm(forms.ModelForm):
@@ -167,4 +167,47 @@ class CitaUpdateForm(forms.ModelForm):
             'fecha': forms.TextInput(attrs={'class':'form-control'}), 
             'informe': forms.TextInput(attrs={'class':'form-control'}),
         }
+
+class MensajeForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(MensajeForm, self).__init__(*args, **kwargs)
+        #self.fields['idEmisor'].queryset =  User.objects.filter(idEmisor=self.kwargs['pk'].nombre)
+        #self.fields['idReceptor'].queryset = self.fields['idReceptor'].queryset.exclude(id=current_user.id)
+
+    class Meta:
+        model = Mensaje
+        
+        fields= [
+            'idEmisor',
+            'idReceptor',
+            'fecha',
+            'asunto',
+            'texto',
+            'leido'
+        ]
+        labels = {
+            'idEmisor': 'Emisor',
+            'idReceptor' : 'Receptor',
+            'fecha' : 'Fecha',
+            'asunto' : 'Asunto',
+            'texto' : 'Texto',
+            
+        }
+        widgets = {
+            'idReceptor': forms.Select(attrs={'class':'form-control'}),
+            'fecha': forms.DateInput(attrs={'class':'form-control'}), 
+            'asunto': forms.TextInput(attrs={'class':'form-control'}),
+            'texto': forms.Textarea(attrs={'class':'form-control'}),
+        }
+
+class LeidoForm(forms.ModelForm):
+    
+    class Meta:
+
+        model = Mensaje
+        
+        fields= [
+            'leido'
+        ]
 

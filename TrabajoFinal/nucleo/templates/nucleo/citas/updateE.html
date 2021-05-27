@@ -23,14 +23,14 @@
           <td>{{ ci.idCliente }}</td>
           <td>{{ ci.idEspecialista }}</td>
           <td>
-          <a class="btn btn-primary" href="{%url 'nucleo:editarCitas' ci.pk %}">Editar</a>
+          <a class="btn btn-primary" href="{%url 'nucleo:editarCitasE' ci.pk %}">Editar</a>
           <a class="btn btn-danger" href="{% url 'nucleo:borrarCitas' ci.pk  %}">Eliminar</a>
           </td>
         </tr>
         {% endfor %}
         
         {% else %}
-        <h1>No hay registros de citas</h1>
+        <h1>No hay registros de citas para hoy</h1>
 
      {% endif %}
 

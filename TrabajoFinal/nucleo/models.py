@@ -56,7 +56,7 @@ class Cita(models.Model):
     fecha=models.DateField(verbose_name="Fecha", null=False)
     idCliente=models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="Cliente")
     idEspecialista=models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="Especilaista")
-    informe=models.TextField(null=True, blank=False)
+    informe=models.TextField()
     realizada=models.BooleanField(null=False, blank=False)
 
     class Meta:
@@ -64,7 +64,7 @@ class Cita(models.Model):
         verbose_name_plural="Citas"
 
     def __str__(self):
-        return self.informe
+        return self.idCliente
 
 
 class Mensaje(models.Model):
