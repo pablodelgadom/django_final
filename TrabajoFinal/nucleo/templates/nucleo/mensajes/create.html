@@ -3,10 +3,28 @@
 
 {%block contenido %}
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+
+    {% comment %} <p>Emisor : {{ user }} </p>
+    <input type="hidden" value = {{ request.user }} name='idEmisor' >
+
+    <p> Receptor :</p>
+    {{ form.idReceptor }}
+
+    <p> Fecha :</p>
+    {{ form.fecha }}
+
+    <p> Asunto :</p>
+    {{ form.asunto }}
+
+    <p> Texto :</p>
+    {{ form.texto }}
+
+    <p> Leido : {{ form.leido }} </p> {% endcomment %}
+
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Guardar</button>
+
+    <p><input type="submit" class="btn btn-primary" value="Enviar"></p>
 </form>
 
  {% endblock %}

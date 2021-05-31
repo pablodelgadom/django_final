@@ -81,4 +81,4 @@ class Mensaje(models.Model):
         verbose_name_plural="Mensajes"
 
     def __str__(self):
-        return self.idEmisor+" "+self.idReceptor+" "+self.asunto
+        return self.texto

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.detail import DetailView
 from nucleo.decorators import cliente_required, especialista_required
 from django.http import request
-from nucleo.forms import CitaForm, CitaUpdateForm, EditUserForm, LeidoForm, MensajeForm, UserForm
+from nucleo.forms import AplazarForm, CitaForm, CitaUpdateForm, EditUserForm, LeidoForm, MensajeForm, RellenarForm, UserForm
 from nucleo.models import Cita, Mensaje, User
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView,UpdateView,DeleteView
@@ -96,18 +96,18 @@ class clienteDelete(DeleteView):
 
 def crearCitas(request):
     if request.method == 'POST':
-        form = CitaForm(request.POST)
+        form = CitaForm(request.user,request.POST)
         if form.is_valid():
             form.save()
         return redirect('nucleo:Portada')
     else:
-        form = UserForm()
+        form = UserForm(request.user)
 
     return render(request, 'nucleo/citas/create.html', {'form':form})
 
 class citaCreate(CreateView):
     model = Cita
-    form_class = CitaForm
+    form_class = CitaForm()
     template_name = 'nucleo/citas/create.html'
     success_url = reverse_lazy('nucleo:Portada')
 
@@ -133,21 +133,44 @@ class citaUpdate(UpdateView):
     template_name = 'nucleo/citas/create.html'
     success_url = reverse_lazy('nucleo:Portada')
 
+    @method_decorator(cliente_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
-def editarCitasE(request, id_cita):
+
+def aplazar(request, id_cita):
     cita = Cita.objects.get(id=id_cita)
     if request.method == 'GET':
-        form = EditUserForm(instance=cita)
+        form = AplazarForm(instance=cita)
     else:
-        form = CitaUpdateForm(request.POST, instance=cita)
+        form = AplazarForm(request.POST, instance=cita)
         if form.is_valid():
             form.save()
         return redirect('nucleo:Portada')
     return render(request, 'nucleo/citas/create.html', {'form':form})
 
-class citaUpdateE(UpdateView):
+class aplazarCita(UpdateView):
     model = Cita
-    form_class = CitaUpdateForm
+    form_class = AplazarForm
+    template_name = 'nucleo/citas/create.html'
+    success_url = reverse_lazy('nucleo:Portada')
+
+
+
+def rellenar(request, id_cita):
+    cita = Cita.objects.get(id=id_cita)
+    if request.method == 'GET':
+        form = RellenarForm(instance=cita)
+    else:
+        form = RellenarForm(request.POST, instance=cita)
+        if form.is_valid():
+            form.save()
+        return redirect('nucleo:Portada')
+    return render(request, 'nucleo/citas/create.html', {'form':form})
+
+class rellenarInforme(UpdateView):
+    model = Cita
+    form_class = RellenarForm
     template_name = 'nucleo/citas/create.html'
     success_url = reverse_lazy('nucleo:Portada')
 
@@ -167,16 +190,18 @@ class citaDelete(DeleteView):
         return super().dispatch(*args, **kwargs)
 
 
+
+
     #Mensajes
 
 def crearMensaje(request):
     if request.method == 'POST':
-        form = MensajeForm(request.user, request.POST)
+        form = MensajeForm(request.POST)
         if form.is_valid():
             form.save()
         return redirect('nucleo:Portada')
     else:
-        form = MensajeForm(request.user)
+        form = MensajeForm()
 
     return render(request, 'nucleo/mensajes/create.html', {'form':form})
 
@@ -187,6 +212,15 @@ class mensajeCreate(CreateView):
     form_class = MensajeForm
     template_name = 'nucleo/mensajes/create.html'
     success_url = reverse_lazy('nucleo:Portada')
+
+    def form_valid(self, form):
+        # Entramos al if si el usuario autenticado no es admin
+        if not self.request.user.is_superuser:
+
+            form.instance.idEmisor = self.request.user # Damos el valor al campo
+
+        return super().form_valid(form)
+
 
 
 def editarMensaje(request, id_mensaje):
@@ -207,20 +241,23 @@ class mensajeUpdate(UpdateView):
     success_url = reverse_lazy('nucleo:Portada')
 
 
-# class MensajeDetailView(DetailView):
-
-#     model = Mensaje
-
-#     def get(self, request, *args, **kwargs):
-#         mensaje = get_object_or_404(Mensaje, pk=kwargs['pk'])
-#         context = {'mensajes': mensaje}
-#         return render(request, 'books/book_detail.html', context)
-
-
 def recibidos(request, pk):
-    mensaje=Mensaje.objects.filter(idReceptor=pk)
+    mensaje=Mensaje.objects.filter(idReceptor=pk).order_by('-fecha')
     context={'mensajes':mensaje}
     return render(request, 'nucleo/mensajes/recibidos.html',context)
+
+    # def get_context_data(self, **kwargs):
+    #     context = super(citaUpdateE.self).get_context_data(**kwargs)
+    #     mensaje = Mensaje.objects.get(id=self.kwargs.get('pk'),idReceptor=self.request.user)
+
+    #     context['idReceptor'] = mensaje.idReceptor
+    #     context['idEmisor'] = mensaje.idEmisor
+    #     context['fecha'] = mensaje.fecha
+    #     context['asunto'] = mensaje.asunto
+    #     context['texto'] = mensaje.texto
+    #     context['leido'] = mensaje.leido
+
+    #     return context
 
 @cliente_required
 def historialC(request, pk):

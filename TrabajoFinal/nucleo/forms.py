@@ -131,21 +131,18 @@ class CitaForm(forms.ModelForm):
             'fecha',
             'idCliente',
             'idEspecialista',
-            'informe',
             'realizada',
         ]
         labels = {
             'fecha':'Fecha',
             'idCliente':'Cliente',
             'idEspecialista':'Especialista',
-            'informe':'Informe',
             'realizada':'Realizada',
         }
         widgets = {
             'fecha': forms.TextInput(attrs={'class':'form-control'}), 
             'idCliente': forms.Select(attrs={'class':'form-control'}),
             'idEspecialista': forms.Select(attrs={'class':'form-control'}),
-            'informe': forms.TextInput(attrs={'class':'form-control'}),
         }
 
 class CitaUpdateForm(forms.ModelForm):
@@ -169,17 +166,16 @@ class CitaUpdateForm(forms.ModelForm):
         }
 
 class MensajeForm(forms.ModelForm):
-    
+
     def __init__(self, *args, **kwargs):
         super(MensajeForm, self).__init__(*args, **kwargs)
-        #self.fields['idEmisor'].queryset =  User.objects.filter(idEmisor=self.kwargs['pk'].nombre)
-        #self.fields['idReceptor'].queryset = self.fields['idReceptor'].queryset.exclude(id=current_user.id)
-
+        # self.fields['idReceptor'].queryset =  User.objects.filter(is_especialista=True)
+    
     class Meta:
         model = Mensaje
         
         fields= [
-            'idEmisor',
+            # 'idEmisor',
             'idReceptor',
             'fecha',
             'asunto',
@@ -187,14 +183,15 @@ class MensajeForm(forms.ModelForm):
             'leido'
         ]
         labels = {
-            'idEmisor': 'Emisor',
+            # 'idEmisor': 'Emisor',
             'idReceptor' : 'Receptor',
             'fecha' : 'Fecha',
             'asunto' : 'Asunto',
             'texto' : 'Texto',
-            
+            'leido' : 'Leido'
         }
         widgets = {
+            # 'idEmisor': forms.Select(attrs={'class':'form-control'}),
             'idReceptor': forms.Select(attrs={'class':'form-control'}),
             'fecha': forms.DateInput(attrs={'class':'form-control'}), 
             'asunto': forms.TextInput(attrs={'class':'form-control'}),
@@ -211,3 +208,23 @@ class LeidoForm(forms.ModelForm):
             'leido'
         ]
 
+class AplazarForm(forms.ModelForm):
+    
+    class Meta:
+
+        model = Cita
+        
+        fields= [
+            'fecha'
+        ]
+
+class RellenarForm(forms.ModelForm):
+    
+    class Meta:
+
+        model = Cita
+        
+        fields= [
+            'informe',
+            'realizada'
+        ]

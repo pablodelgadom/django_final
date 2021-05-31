@@ -25,8 +25,8 @@
           <td>{{ ci.idCliente }}</td>
           <td>{{ ci.idEspecialista }}</td>
           <td>
-          <a class="btn btn-primary" href="{%url 'nucleo:editarCitasE' ci.pk %}">Editar</a>
-          <a class="btn btn-danger" href="{% url 'nucleo:borrarCitas' ci.pk  %}">Eliminar</a>
+          <a class="btn btn-primary" href="{%url 'nucleo:aplazar' ci.pk %}">Aplazar</a>
+          <a class="btn btn-primary" href="{% url 'nucleo:rellenar' ci.pk  %}">Rellenar informe</a>
           </td>
         </tr>
         {% endfor %}

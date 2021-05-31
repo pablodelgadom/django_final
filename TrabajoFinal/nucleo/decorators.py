@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import user_passes_test
 
 def cliente_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='login'):
     '''
-    Decorator for views that checks that the logged in user is a student,
+    Decorator for views that checks that the logged in user is a especialista,
     redirects to the log-in page if necessary.
     '''
     actual_decorator = user_passes_test(
@@ -20,7 +20,7 @@ def cliente_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, log
 
 def especialista_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='login'):
     '''
-    Decorator for views that checks that the logged in user is a student,
+    Decorator for views that checks that the logged in user is a cliente,
     redirects to the log-in page if necessary.
     '''
     actual_decorator = user_passes_test(
