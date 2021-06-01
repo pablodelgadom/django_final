@@ -38,6 +38,7 @@ urlpatterns = [
     #Mensajes
 
     path('mensajes/create', views.mensajeCreate.as_view(), name="crearMensajes"),
+    path('mensajes/createE', views.mensajeCreateE.as_view(), name="crearMensajesE"),
     path('mensajes/recibidos/<int:pk>', views.recibidos, name="recibidos"),
     path('mensajes/update/<int:pk>', views.mensajeUpdate.as_view(), name="editarMensajes"),
 

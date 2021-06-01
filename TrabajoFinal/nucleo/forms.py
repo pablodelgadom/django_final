@@ -165,38 +165,62 @@ class CitaUpdateForm(forms.ModelForm):
             'informe': forms.TextInput(attrs={'class':'form-control'}),
         }
 
-class MensajeForm(forms.ModelForm):
+class MensajeFormC(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-        super(MensajeForm, self).__init__(*args, **kwargs)
-        # self.fields['idReceptor'].queryset =  User.objects.filter(is_especialista=True)
+        super(MensajeFormC, self).__init__(*args, **kwargs)
+
+        self.fields['idReceptor'].queryset =  User.objects.filter(is_especialista=True)
+
+    class Meta:
+        model = Mensaje
+        
+        fields= [
+            'idReceptor',
+            'asunto',
+            'texto',
+        ]
+        labels = {
+            'idReceptor' : 'Receptor',
+            'asunto' : 'Asunto',
+            'texto' : 'Texto',
+        }
+        widgets = {
+            'idReceptor': forms.Select(attrs={'class':'form-control'}),
+            'asunto': forms.TextInput(attrs={'class':'form-control'}),
+            'texto': forms.Textarea(attrs={'class':'form-control'}),
+        }
+
+
+class MensajeFormE(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(MensajeFormE, self).__init__(*args, **kwargs)
+
+        self.fields['idReceptor'].queryset =  User.objects.filter(is_especialista=False)
+
+
     
     class Meta:
         model = Mensaje
         
         fields= [
-            # 'idEmisor',
             'idReceptor',
-            'fecha',
             'asunto',
             'texto',
-            'leido'
         ]
         labels = {
-            # 'idEmisor': 'Emisor',
             'idReceptor' : 'Receptor',
-            'fecha' : 'Fecha',
             'asunto' : 'Asunto',
             'texto' : 'Texto',
-            'leido' : 'Leido'
         }
         widgets = {
-            # 'idEmisor': forms.Select(attrs={'class':'form-control'}),
             'idReceptor': forms.Select(attrs={'class':'form-control'}),
-            'fecha': forms.DateInput(attrs={'class':'form-control'}), 
             'asunto': forms.TextInput(attrs={'class':'form-control'}),
             'texto': forms.Textarea(attrs={'class':'form-control'}),
         }
+
+
 
 class LeidoForm(forms.ModelForm):
     
@@ -217,6 +241,9 @@ class AplazarForm(forms.ModelForm):
         fields= [
             'fecha'
         ]
+        widgets = {
+            'fecha': forms.SelectDateWidget()
+        }
 
 class RellenarForm(forms.ModelForm):
     

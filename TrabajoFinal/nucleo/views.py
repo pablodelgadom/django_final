@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.detail import DetailView
 from nucleo.decorators import cliente_required, especialista_required
 from django.http import request
-from nucleo.forms import AplazarForm, CitaForm, CitaUpdateForm, EditUserForm, LeidoForm, MensajeForm, RellenarForm, UserForm
+from nucleo.forms import AplazarForm, CitaForm, CitaUpdateForm, EditUserForm, LeidoForm, MensajeFormC,MensajeFormE, RellenarForm, UserForm
 from nucleo.models import Cita, Mensaje, User
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView,UpdateView,DeleteView
@@ -196,12 +196,12 @@ class citaDelete(DeleteView):
 
 def crearMensaje(request):
     if request.method == 'POST':
-        form = MensajeForm(request.POST)
+        form = MensajeFormC(request.POST)
         if form.is_valid():
             form.save()
         return redirect('nucleo:Portada')
     else:
-        form = MensajeForm()
+        form = MensajeFormC()
 
     return render(request, 'nucleo/mensajes/create.html', {'form':form})
 
@@ -209,7 +209,7 @@ def crearMensaje(request):
 @method_decorator(login_required, name='dispatch')
 class mensajeCreate(CreateView):
     model = Mensaje
-    form_class = MensajeForm
+    form_class = MensajeFormC
     template_name = 'nucleo/mensajes/create.html'
     success_url = reverse_lazy('nucleo:Portada')
 
@@ -218,8 +218,44 @@ class mensajeCreate(CreateView):
         if not self.request.user.is_superuser:
 
             form.instance.idEmisor = self.request.user # Damos el valor al campo
+            form.instance.fecha = datetime.date.today()
+            form.instance.leido = False
 
         return super().form_valid(form)
+
+
+
+
+def crearMensajeE(request):
+    if request.method == 'POST':
+        form = MensajeFormE(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('nucleo:Portada')
+    else:
+        form = MensajeFormE()
+
+    return render(request, 'nucleo/mensajes/createE.html', {'form':form})
+
+
+@method_decorator(login_required, name='dispatch')
+class mensajeCreateE(CreateView):
+    model = Mensaje
+    form_class = MensajeFormE
+    template_name = 'nucleo/mensajes/createE.html'
+    success_url = reverse_lazy('nucleo:Portada')
+
+    def form_valid(self, form):
+        # Entramos al if si el usuario autenticado no es admin
+        if not self.request.user.is_superuser:
+
+            form.instance.idEmisor = self.request.user # Damos el valor al campo
+            form.instance.fecha = datetime.date.today()
+            form.instance.leido = False
+
+        return super().form_valid(form)
+
+
 
 
 
