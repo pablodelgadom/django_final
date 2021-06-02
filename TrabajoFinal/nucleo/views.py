@@ -155,6 +155,10 @@ class aplazarCita(UpdateView):
     template_name = 'nucleo/citas/create.html'
     success_url = reverse_lazy('nucleo:Portada')
 
+    @method_decorator(especialista_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
 
 
 def rellenar(request, id_cita):
@@ -173,6 +177,10 @@ class rellenarInforme(UpdateView):
     form_class = RellenarForm
     template_name = 'nucleo/citas/create.html'
     success_url = reverse_lazy('nucleo:Portada')
+
+    @method_decorator(especialista_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
 
 def borrarCitas(request, id_cita):
@@ -222,6 +230,10 @@ class mensajeCreate(CreateView):
             form.instance.leido = False
 
         return super().form_valid(form)
+    
+    @method_decorator(cliente_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
 
 
@@ -255,6 +267,10 @@ class mensajeCreateE(CreateView):
 
         return super().form_valid(form)
 
+    @method_decorator(especialista_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
 
 
 
@@ -282,18 +298,6 @@ def recibidos(request, pk):
     context={'mensajes':mensaje}
     return render(request, 'nucleo/mensajes/recibidos.html',context)
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(citaUpdateE.self).get_context_data(**kwargs)
-    #     mensaje = Mensaje.objects.get(id=self.kwargs.get('pk'),idReceptor=self.request.user)
-
-    #     context['idReceptor'] = mensaje.idReceptor
-    #     context['idEmisor'] = mensaje.idEmisor
-    #     context['fecha'] = mensaje.fecha
-    #     context['asunto'] = mensaje.asunto
-    #     context['texto'] = mensaje.texto
-    #     context['leido'] = mensaje.leido
-
-    #     return context
 
 @cliente_required
 def historialC(request, pk):
