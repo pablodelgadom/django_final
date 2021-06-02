@@ -13,12 +13,11 @@
             <th scope="col">asunto</th>
             <th scope="col">texto</th>
             <th scope="col">leido </th>
-            <th scope="col">Acciones </th>
             </tr>
         </thead>
     <tbody>
     {% for e in mensajes %}
-        {% if e.idReceptor == request.user %}
+        {% if e.idEmisor == request.user %}
             <tr>
             <td>{{ e.idEmisor }}</td>
             <td>{{ e.fecha }}</td>
@@ -30,7 +29,6 @@
             {% else %}
                 {% load static %}
                 <td>&#128078;</td>
-                <td><a class="btn btn-primary" href="{%url 'nucleo:editarMensajes' e.pk %}">Marcar como leido</a></td>
             {% endif %}
             
         {% else %}

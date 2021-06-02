@@ -58,13 +58,13 @@
             </li>
             {% else %}
               <nav><ul>
-                <li class="nav-item"><a class="nav-link">mensajeria</a>
                 {% if request.user.is_cliente %}
                 <ul><li class="nav-item"><a class="nav-link" href="{% url 'nucleo:crearMensajes' %}">Enviar mensaje</a></li>
                 {% else %}
                 <ul><li class="nav-item"><a class="nav-link" href="{% url 'nucleo:crearMensajesE' %}">Enviar mensaje</a></li>
                 {% endif %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'nucleo:recibidos' request.user.id %}">Mensajes recibidos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'nucleo:enviados' request.user.id %}">Mensajes enviados</a></li>
               </ul></nav>
             <li class="nav-item">
               <a class="nav-link">Usted ha iniciado sesion como {{request.user.username}}</a>

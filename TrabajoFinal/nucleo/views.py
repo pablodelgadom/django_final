@@ -296,6 +296,11 @@ def recibidos(request, pk):
     context={'mensajes':mensaje}
     return render(request, 'nucleo/mensajes/recibidos.html',context)
 
+def enviados(request, pk):
+    mensaje=Mensaje.objects.filter(idEmisor=pk).order_by('-fecha')
+    context={'mensajes':mensaje}
+    return render(request, 'nucleo/mensajes/enviados.html',context)
+
 
 @cliente_required
 def historialC(request, pk):
