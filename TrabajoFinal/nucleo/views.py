@@ -196,8 +196,6 @@ class citaDelete(DeleteView):
         return super().dispatch(*args, **kwargs)
 
 
-
-
     #Mensajes
 
 def crearMensaje(request):
@@ -271,8 +269,6 @@ class mensajeCreateE(CreateView):
 
 
 
-
-
 def editarMensaje(request, id_mensaje):
     mensaje = Mensaje.objects.get(id=id_mensaje)
     if request.method == 'GET':
@@ -284,18 +280,21 @@ def editarMensaje(request, id_mensaje):
         return redirect('nucleo:Portada')
     return render(request, 'nucleo/mensajes/create.html', {'form':form})
 
+@method_decorator(login_required, name='dispatch')
 class mensajeUpdate(UpdateView):
     model = Mensaje
     form_class = LeidoForm
     template_name = 'nucleo/mensajes/create.html'
     success_url = reverse_lazy('nucleo:Portada')
+    
 
-
+@login_required
 def recibidos(request, pk):
     mensaje=Mensaje.objects.filter(idReceptor=pk).order_by('-fecha')
     context={'mensajes':mensaje}
     return render(request, 'nucleo/mensajes/recibidos.html',context)
 
+@login_required
 def enviados(request, pk):
     mensaje=Mensaje.objects.filter(idEmisor=pk).order_by('-fecha')
     context={'mensajes':mensaje}
