@@ -1,11 +1,9 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-from django.views.generic.detail import DetailView
 from nucleo.decorators import cliente_required, especialista_required
-from django.http import request
-from nucleo.forms import AplazarForm, CitaForm, CitaUpdateForm, EditUserForm, LeidoForm, MensajeFormC,MensajeFormE, RellenarForm, UserForm
+from nucleo.forms import AplazarForm, CitaForm, EditUserForm, LeidoForm, MensajeFormC,MensajeFormE, RellenarForm, UserForm
 from nucleo.models import Cita, Mensaje, User
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 from django.views.generic import CreateView,UpdateView,DeleteView
 from django.urls.base import reverse_lazy
 from nucleo.decorators import cliente_required, especialista_required
@@ -96,18 +94,18 @@ class clienteDelete(DeleteView):
 
 def crearCitas(request):
     if request.method == 'POST':
-        form = CitaForm(request.user,request.POST)
+        form =  CitaForm(request.POST)
         if form.is_valid():
             form.save()
         return redirect('nucleo:Portada')
     else:
-        form = UserForm(request.user)
+        form = CitaForm()
 
     return render(request, 'nucleo/citas/create.html', {'form':form})
 
 class citaCreate(CreateView):
     model = Cita
-    form_class = CitaForm()
+    form_class = CitaForm
     template_name = 'nucleo/citas/create.html'
     success_url = reverse_lazy('nucleo:Portada')
 
