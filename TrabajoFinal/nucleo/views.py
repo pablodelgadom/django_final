@@ -379,8 +379,8 @@ class PDF(View):
         usuario = []
 
         for u in User.objects.all():
-            if u.id == self.request.user.id :
-                usuario+=u
+            if u.id == self.request.user.id:
+                usuario.append(u)
         #Creamos una tupla de encabezados para neustra tabla
         encabezados = ('DNI', 'Nombre', 'Apellidos', 'Direccion')
         #Creamos una lista de tuplas que van a contener a las personas
@@ -398,7 +398,7 @@ class PDF(View):
                 ('FONTSIZE', (0, 0), (-1, -1), 10),
             ]
         ))
-        #Establecemos el tamaño de la hoja que ocupará la tabla 
+        #Establecemos el tamaño de la hoja que ocupará la tabla
         detalle_orden.wrapOn(pdf, 800, 600)
         #Definimos la coordenada donde se dibujará la tabla
         detalle_orden.drawOn(pdf, 40,y)
