@@ -43,4 +43,8 @@ urlpatterns = [
     path('mensajes/enviados/<int:pk>', views.enviados, name="enviados"),
     path('mensajes/update/<int:pk>', views.mensajeUpdate.as_view(), name="editarMensajes"),
 
+    #pdf
+
+    path('cliente/pdf/<int:pk>', views.PDF.as_view(), name="informe_pdf"),
+    
 ]

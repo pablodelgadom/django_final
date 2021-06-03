@@ -1,5 +1,9 @@
+from io import BytesIO
+from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
+from django.http.response import HttpResponse
+from django.views.generic.base import View
 from nucleo.decorators import cliente_required, especialista_required
 from nucleo.forms import AplazarForm, CitaForm, EditUserForm, LeidoForm, MensajeFormC,MensajeFormE, RellenarForm, UserForm
 from nucleo.models import Cita, Mensaje, User
@@ -8,7 +12,13 @@ from django.views.generic import CreateView,UpdateView,DeleteView
 from django.urls.base import reverse_lazy
 from nucleo.decorators import cliente_required, especialista_required
 from django.utils.decorators import method_decorator
+from reportlab.lib.units import cm
+from reportlab.lib import colors
 import datetime
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfform
+from reportlab.lib.colors import magenta, pink, blue, green, red
 
 # Create your views here.
 
@@ -330,3 +340,117 @@ def hoy(request, pk):
     cita=Cita.objects.filter(idEspecialista=pk).filter(fecha=datetime.date.today())
     context={'citas':cita}
     return render(request, 'nucleo/citas/hoy.html',context)
+
+class PDF(View):  
+     
+    def cabecera(self,pdf):
+        #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
+        archivo_imagen = settings.MEDIA_ROOT+'/img/Portada.png'
+        #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
+        pdf.drawImage(archivo_imagen, 40, 750, 120, 90,preserveAspectRatio=True)
+        #Establecemos el tamaño de letra en 16 y el tipo de letra Helvetica
+        pdf.setFont("Helvetica", 16)
+        #Dibujamos una cadena en la ubicación X,Y especificada
+        pdf.drawString(230, 790, u"YO TE AYUDO")
+        pdf.setFont("Helvetica", 14)
+        pdf.drawString(200, 770, u"REPORTE DE CLIENTE")
+         
+    def get(self, request, *args, **kwargs):
+        #Indicamos el tipo de contenido a devolver, en este caso un pdf
+        response = HttpResponse(content_type='application/pdf')
+        #La clase io.BytesIO permite tratar un array de bytes como un fichero binario, se utiliza como almacenamiento temporal
+        buffer = BytesIO()
+        #Canvas nos permite hacer el reporte con coordenadas X y Y
+        pdf = canvas.Canvas(buffer)
+        #Llamo al método cabecera donde están definidos los datos que aparecen en la cabecera del reporte.
+        self.cabecera(pdf)
+        # self.fechas()
+        self.tablaCliente(pdf, 600)
+        self.tablaCitas(pdf, 200)
+        #Con show page hacemos un corte de página para pasar a la siguiente
+        pdf.showPage()
+        pdf.save()
+        pdf = buffer.getvalue()
+        buffer.close()
+        response.write(pdf)
+        return response
+
+    def tablaCliente(self,pdf,y):
+        usuario = []
+
+        for u in User.objects.all():
+            if u.id == self.request.user.id :
+                usuario+=u
+        #Creamos una tupla de encabezados para neustra tabla
+        encabezados = ('DNI', 'Nombre', 'Apellidos', 'Direccion')
+        #Creamos una lista de tuplas que van a contener a las personas
+        detalles = [(u.dni, u.first_name, u.last_name,u.direccion) for u in usuario]
+        #Establecemos el tamaño de cada una de las columnas de la tabla
+        detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 5 * cm, 5 * cm, 5 * cm])
+        #Aplicamos estilos a las celdas de la tabla
+        detalle_orden.setStyle(TableStyle(
+            [
+                #La primera fila(encabezados) va a estar centrada
+                ('ALIGN',(0,0),(3,0),'CENTER'),
+                #Los bordes de todas las celdas serán de color negro y con un grosor de 1
+                ('GRID', (0, 0), (-1, -1), 1, colors.black), 
+                #El tamaño de las letras de cada una de las celdas será de 10
+                ('FONTSIZE', (0, 0), (-1, -1), 10),
+            ]
+        ))
+        #Establecemos el tamaño de la hoja que ocupará la tabla 
+        detalle_orden.wrapOn(pdf, 800, 600)
+        #Definimos la coordenada donde se dibujará la tabla
+        detalle_orden.drawOn(pdf, 40,y)
+
+
+    def tablaCitas(self,pdf,y):
+            #Creamos una tupla de encabezados para neustra tabla
+            encabezados = ('Fecha', 'Especialista', 'Informe')
+            #Creamos una lista de tuplas que van a contener a las personas
+            detalles = [(u.fecha, u.idEspecialista,u.informe) for u in Cita.objects.all()]
+            #Establecemos el tamaño de cada una de las columnas de la tabla
+            detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 5 * cm, 5 * cm, 5 * cm])
+            #Aplicamos estilos a las celdas de la tabla
+            detalle_orden.setStyle(TableStyle(
+                [
+                    #La primera fila(encabezados) va a estar centrada
+                    ('ALIGN',(0,0),(3,0),'CENTER'),
+                    #Los bordes de todas las celdas serán de color negro y con un grosor de 1
+                    ('GRID', (0, 0), (-1, -1), 1, colors.black), 
+                    #El tamaño de las letras de cada una de las celdas será de 10
+                    ('FONTSIZE', (0, 0), (-1, -1), 10),
+                ]
+            ))
+            #Establecemos el tamaño de la hoja que ocupará la tabla 
+            detalle_orden.wrapOn(pdf, 800, 600)
+            #Definimos la coordenada donde se dibujará la tabla
+            detalle_orden.drawOn(pdf, 40,y)
+
+    
+    def fechas():
+        c = canvas.Canvas('simple_choices.pdf')
+    
+        c.setFont("Courier", 20)
+        c.drawCentredString(300, 700, 'Choices')
+        c.setFont("Courier", 14)
+        form = c.acroForm
+        
+        c.drawString(10, 650, 'Choose a letter:')
+        options = [('A','Av'),'B',('C','Cv'),('D','Dv'),'E',('F',),('G','Gv')]
+        form.choice(name='choice1', tooltip='Field choice1',
+                    value='A',
+                    x=165, y=645, width=72, height=20,
+                    borderColor=magenta, fillColor=pink, 
+                    textColor=blue, forceBorder=True, options=options)
+    
+        c.drawString(10, 600, 'Choose an animal:')
+        options = [('Cat', 'cat'), ('Dog', 'dog'), ('Pig', 'pig')]
+        form.choice(name='choice2', tooltip='Field choice2',
+                    value='Cat',
+                    options=options, 
+                    x=165, y=595, width=72, height=20,
+                    borderStyle='solid', borderWidth=1,
+                    forceBorder=True)
+        
+        c.save()

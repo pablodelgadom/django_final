@@ -125,6 +125,13 @@
 <a class="btn btn-primary" href="{% url 'nucleo:CRUD' request.user.id %}">Citas pendientes</a>
 </div>
 
+{% comment %} <div>
+<h5> Desacargar todas mis citas </h5>
+
+
+<a class="btn btn-primary" href="{% url 'nucleo:informe_pdf' request.user.id  %}">	&#128424; Descargar pdf</a>
+</div> {% endcomment %}
+
 </div>
 {% endif %}
 
@@ -153,7 +160,9 @@
         <td>{{ c.dni }}</td>
         <td>{{ c.direccion }}</td>
         <td>{{ c.fechaNacimiento }}</td>
-        <td><a class="btn btn-primary" href="{% url 'nucleo:historialE' c.pk  %}">Ver historial de {{c.first_name}}</a></td>
+        <td>
+        <a class="btn btn-primary" href="{% url 'nucleo:historialE' c.pk  %}">Ver historial de {{c.first_name}}</a>
+        </td>
       </tr>
       {% endfor %}
       

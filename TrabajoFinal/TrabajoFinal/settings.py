@@ -131,3 +131,5 @@ LOGIN_REDIRECT_URL='/'
 LOGOUT_REDIRECT_URL='/'
 
 AUTH_USER_MODEL = 'nucleo.User'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'nucleo/static')
