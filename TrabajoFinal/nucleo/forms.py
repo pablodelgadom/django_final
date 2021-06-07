@@ -255,3 +255,18 @@ class RellenarForm(forms.ModelForm):
             'informe',
             'realizada'
         ]
+
+class FechasForm(forms.ModelForm):
+    
+    class Meta:
+
+        model = Cita
+        
+        fields= [
+            'fecha',
+            'fecha'
+        ]
+        widgets = {
+            'fecha': forms.SelectDateWidget(),
+            'fecha': forms.SelectDateWidget()
+        }

@@ -46,5 +46,6 @@ urlpatterns = [
     #pdf
 
     path('cliente/pdf/<int:pk>', views.PDF.as_view(), name="informe_pdf"),
+    # path('pdf/form', views.crearPDF, name="formPDF"),
     
 ]

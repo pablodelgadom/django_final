@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponse
 from django.views.generic.base import View
 from nucleo.decorators import cliente_required, especialista_required
-from nucleo.forms import AplazarForm, CitaForm, EditUserForm, LeidoForm, MensajeFormC,MensajeFormE, RellenarForm, UserForm
+from nucleo.forms import AplazarForm, CitaForm, EditUserForm, FechasForm, LeidoForm, MensajeFormC,MensajeFormE, RellenarForm, UserForm
 from nucleo.models import Cita, Mensaje, User
 from django.shortcuts import redirect, render
 from django.views.generic import CreateView,UpdateView,DeleteView
@@ -341,7 +341,21 @@ def hoy(request, pk):
     context={'citas':cita}
     return render(request, 'nucleo/citas/hoy.html',context)
 
-class PDF(View):  
+
+# def crearPDF(request):
+    # if request.method == 'POST':
+    #     form = FechasForm(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #     return redirect('nucleo:Portada')
+    # else:
+    #     form = FechasForm()
+
+    # return render(request, 'nucleo/pdf/form.html', {'form':form})
+    
+class PDF(View):
+
+
      
     def cabecera(self,pdf):
         #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
@@ -365,8 +379,8 @@ class PDF(View):
         #Llamo al método cabecera donde están definidos los datos que aparecen en la cabecera del reporte.
         self.cabecera(pdf)
         # self.fechas()
-        self.tablaCliente(pdf, 600)
-        self.tablaCitas(pdf, 200)
+        self.datosCliente(pdf)
+        self.tablaCitas(pdf, 400)
         #Con show page hacemos un corte de página para pasar a la siguiente
         pdf.showPage()
         pdf.save()
@@ -375,40 +389,33 @@ class PDF(View):
         response.write(pdf)
         return response
 
-    def tablaCliente(self,pdf,y):
+    def datosCliente(self,pdf):
+
+        cliente = User.objects.get(id=self.request.user.id)
         usuario = []
 
         for u in User.objects.all():
             if u.id == self.request.user.id:
                 usuario.append(u)
-        #Creamos una tupla de encabezados para neustra tabla
-        encabezados = ('DNI', 'Nombre', 'Apellidos', 'Direccion')
-        #Creamos una lista de tuplas que van a contener a las personas
-        detalles = [(u.dni, u.first_name, u.last_name,u.direccion) for u in usuario]
-        #Establecemos el tamaño de cada una de las columnas de la tabla
-        detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 5 * cm, 5 * cm, 5 * cm])
-        #Aplicamos estilos a las celdas de la tabla
-        detalle_orden.setStyle(TableStyle(
-            [
-                #La primera fila(encabezados) va a estar centrada
-                ('ALIGN',(0,0),(3,0),'CENTER'),
-                #Los bordes de todas las celdas serán de color negro y con un grosor de 1
-                ('GRID', (0, 0), (-1, -1), 1, colors.black), 
-                #El tamaño de las letras de cada una de las celdas será de 10
-                ('FONTSIZE', (0, 0), (-1, -1), 10),
-            ]
-        ))
-        #Establecemos el tamaño de la hoja que ocupará la tabla
-        detalle_orden.wrapOn(pdf, 800, 600)
-        #Definimos la coordenada donde se dibujará la tabla
-        detalle_orden.drawOn(pdf, 40,y)
+
+        pdf.drawString(60,680, 'Dni:')
+        pdf.drawString(100,680, cliente.dni)
+
+        pdf.drawString(60,655, 'Nombre:')
+        pdf.drawString(120,655, cliente.first_name)
+
+        pdf.drawString(60,630, 'Apellidos:')
+        pdf.drawString(130,630, cliente.last_name)
+
+        pdf.drawString(60,605, 'Direccion:')
+        pdf.drawString(135,605, cliente.direccion)
 
 
     def tablaCitas(self,pdf,y):
             #Creamos una tupla de encabezados para neustra tabla
             encabezados = ('Fecha', 'Especialista', 'Informe')
             #Creamos una lista de tuplas que van a contener a las personas
-            detalles = [(u.fecha, u.idEspecialista,u.informe) for u in Cita.objects.all()]
+            detalles = [(u.fecha, u.idEspecialista,u.informe) for u in Cita.objects.filter(fecha__range=["2021-05-23", "2021-05-26"])]
             #Establecemos el tamaño de cada una de las columnas de la tabla
             detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 5 * cm, 5 * cm, 5 * cm])
             #Aplicamos estilos a las celdas de la tabla
