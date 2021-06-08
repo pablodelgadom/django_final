@@ -1,8 +1,9 @@
 from io import BytesIO
+from django import forms
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-from django.http.response import HttpResponse
+from django.http.response import Http404, HttpResponse
 from django.views.generic.base import View
 from nucleo.decorators import cliente_required, especialista_required
 from nucleo.forms import AplazarForm, CitaForm, EditUserForm, FechasForm, LeidoForm, MensajeFormC,MensajeFormE, RellenarForm, UserForm
@@ -19,6 +20,14 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfform
 from reportlab.lib.colors import magenta, pink, blue, green, red
+from rest_framework.exceptions import ParseError
+from nucleo import serializers
+from nucleo.serializers import CitasSerializers
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework import status
 
 # Create your views here.
 
@@ -342,21 +351,19 @@ def hoy(request, pk):
     return render(request, 'nucleo/citas/hoy.html',context)
 
 
-# def crearPDF(request):
-    # if request.method == 'POST':
-    #     form = FechasForm(request.POST)
-    #     if form.is_valid():
-    #         form.save()
-    #     return redirect('nucleo:Portada')
-    # else:
-    #     form = FechasForm()
+def crearPDF(request):
+    if request.method == 'POST':
+        form = FechasForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('nucleo:Portada')
+    else:
+        form = FechasForm()
 
-    # return render(request, 'nucleo/pdf/form.html', {'form':form})
+    return render(request, 'nucleo/pdf/form.html', {'form':form})
     
 class PDF(View):
 
-
-     
     def cabecera(self,pdf):
         #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
         archivo_imagen = settings.MEDIA_ROOT+'/img/Portada.png'
@@ -378,7 +385,7 @@ class PDF(View):
         pdf = canvas.Canvas(buffer)
         #Llamo al método cabecera donde están definidos los datos que aparecen en la cabecera del reporte.
         self.cabecera(pdf)
-        # self.fechas()
+        self.fechas(pdf)
         self.datosCliente(pdf)
         self.tablaCitas(pdf, 400)
         #Con show page hacemos un corte de página para pasar a la siguiente
@@ -405,17 +412,17 @@ class PDF(View):
         pdf.drawString(120,655, cliente.first_name)
 
         pdf.drawString(60,630, 'Apellidos:')
-        pdf.drawString(130,630, cliente.last_name)
+        pdf.drawString(150,630, cliente.last_name)
 
         pdf.drawString(60,605, 'Direccion:')
-        pdf.drawString(135,605, cliente.direccion)
+        pdf.drawString(150,605, cliente.direccion)
 
 
     def tablaCitas(self,pdf,y):
             #Creamos una tupla de encabezados para neustra tabla
             encabezados = ('Fecha', 'Especialista', 'Informe')
             #Creamos una lista de tuplas que van a contener a las personas
-            detalles = [(u.fecha, u.idEspecialista,u.informe) for u in Cita.objects.filter(fecha__range=["2021-05-23", "2021-05-26"])]
+            detalles = [(u.fecha, u.idEspecialista,u.informe) for u in Cita.objects.filter(fecha__range=[self.fechas(pdf).ini, self.fechas(pdf).fin])]
             #Establecemos el tamaño de cada una de las columnas de la tabla
             detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 5 * cm, 5 * cm, 5 * cm])
             #Aplicamos estilos a las celdas de la tabla
@@ -432,32 +439,104 @@ class PDF(View):
             #Establecemos el tamaño de la hoja que ocupará la tabla 
             detalle_orden.wrapOn(pdf, 800, 600)
             #Definimos la coordenada donde se dibujará la tabla
-            detalle_orden.drawOn(pdf, 40,y)
+            detalle_orden.drawOn(pdf, 60,y)
 
     
-    def fechas():
-        c = canvas.Canvas('simple_choices.pdf')
-    
-        c.setFont("Courier", 20)
-        c.drawCentredString(300, 700, 'Choices')
-        c.setFont("Courier", 14)
-        form = c.acroForm
-        
-        c.drawString(10, 650, 'Choose a letter:')
-        options = [('A','Av'),'B',('C','Cv'),('D','Dv'),'E',('F',),('G','Gv')]
-        form.choice(name='choice1', tooltip='Field choice1',
-                    value='A',
-                    x=165, y=645, width=72, height=20,
+    def fechas(self,pdf):
+        # c = canvas.Canvas('simple_choices.pdf')
+        form = pdf.acroForm
+
+        pdf.drawString(60, 560, 'Fecha inicial:')
+        form.textfield(name='ini', tooltip='Fecha inicial',
+                    x=150, y=550, borderStyle='inset',
                     borderColor=magenta, fillColor=pink, 
-                    textColor=blue, forceBorder=True, options=options)
+                    width=75,
+                    textColor=blue, forceBorder=True)
+
+
+        pdf.drawString(60, 510, 'Fecha final:')
+        form.textfield(name='fin', tooltip='Fecha final',
+                    x=150, y=500, borderStyle='inset',
+                    borderColor=magenta, fillColor=pink, 
+                    width=75,
+                    textColor=blue, forceBorder=True)
+
+
+
+
+
+
+#API
+
+class Citas_APIView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None, *args, **kwargs):
+        cli = Cita.objects.filter(realizada=True).filter(idCliente=self.request.user.id).order_by('-fecha')
+        serializer = CitasSerializers(cli, many=True)
+        return Response(serializer.data)
+
+    def Post(self, request, format=None):
+        serializer = CitasSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Citas_APIView_Detail(APIView):
+
+    def get_object(self, pk):
+        try:
+            return Cita.objects.get(pk=pk)
+        except Cita.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        cli = self.get_object(pk)
+        serializer = serializers.CitasSerializers(cli)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format= None):
+        cli = self.get_object(pk)
+        serializer = serializers.CitasSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        cli=self.get_object(pk)
+        cli.delete()
+        return Response(status.HTTP_204_NO_CONTENT)
+
+#Generar token
+
+class TestView(APIView):
+
+    def get(self, request, format=None):
+        return Response({'detail': 'GET Response'})
     
-        c.drawString(10, 600, 'Choose an animal:')
-        options = [('Cat', 'cat'), ('Dog', 'dog'), ('Pig', 'pig')]
-        form.choice(name='choice2', tooltip='Field choice2',
-                    value='Cat',
-                    options=options, 
-                    x=165, y=595, width=72, height=20,
-                    borderStyle='solid', borderWidth=1,
-                    forceBorder=True)
+    def post(self, request, format=None):
+        try:
+            data = request.data
+        except ParseError as error:
+            return Response(
+                'INVALID JASON - {0}'.format(error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if "user" not in data or "password" not in data:
+            return Response(
+                'WRONG credentials',
+                status=status.HTTP_401_UNAUTHORIZED
+            )
         
-        c.save()
+        user = User.objects.get(username=data['user'])
+        if not user:
+            return Response(
+                'NO DEFAULT USER, create one',
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        token = Token.objects.get_or_create(user=user)
+        return Response({'detail' : 'POST answer', 'token': token[0].key})
