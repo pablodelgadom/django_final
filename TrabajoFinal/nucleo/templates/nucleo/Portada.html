@@ -129,7 +129,7 @@
 <h5> Desacargar todas mis citas </h5>
 
 <a class="btn btn-primary" href="{% url 'nucleo:crearPDF'  %}">	&#128424;</a>
-<a class="btn btn-primary" href="{% url 'nucleo:informe_pdf' request.user.id  %}">	&#128424; Descargar pdf</a>
+{% comment %} <a class="btn btn-primary" href="{% url 'nucleo:informe_pdf' request.user.id  %}">	&#128424; Descargar pdf</a> {% endcomment %}
 </div>
 
 </div>

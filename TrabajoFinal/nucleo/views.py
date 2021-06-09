@@ -1,8 +1,8 @@
 from io import BytesIO
-from django import forms
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
+from django.db.models.fields import SlugField
 from django.http.response import Http404, HttpResponse
 from django.views.generic.base import View
 from nucleo.decorators import cliente_required, especialista_required
@@ -11,15 +11,13 @@ from nucleo.models import Cita, Mensaje, User
 from django.shortcuts import redirect, render
 from django.views.generic import CreateView,UpdateView,DeleteView
 from django.urls.base import reverse_lazy
-from nucleo.decorators import cliente_required, especialista_required
 from django.utils.decorators import method_decorator
 from reportlab.lib.units import cm
 from reportlab.lib import colors
 import datetime
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.platypus import Table, TableStyle
 from reportlab.pdfgen import canvas
-from reportlab.pdfbase import pdfform
-from reportlab.lib.colors import magenta, pink, blue, green, red
+from reportlab.lib.colors import magenta, pink, blue
 from rest_framework.exceptions import ParseError
 from nucleo import serializers
 from nucleo.serializers import CitasSerializers
@@ -361,8 +359,17 @@ def crearPDF(request):
         form = FechasForm()
 
     return render(request, 'nucleo/pdf/form.html', {'form':form})
+
+class PDFcreate(CreateView):
+    model = Mensaje
+    form_class = FechasForm
+    template_name = 'nucleo/pdf/form.html'
+    success_url = reverse_lazy('nucleo:Portada')
     
 class PDF(View):
+
+    slug = None
+    slug1 = None
 
     def cabecera(self,pdf):
         #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
@@ -385,7 +392,7 @@ class PDF(View):
         pdf = canvas.Canvas(buffer)
         #Llamo al método cabecera donde están definidos los datos que aparecen en la cabecera del reporte.
         self.cabecera(pdf)
-        self.fechas(pdf)
+        # self.fechas(pdf)
         self.datosCliente(pdf)
         self.tablaCitas(pdf, 400)
         #Con show page hacemos un corte de página para pasar a la siguiente
@@ -418,11 +425,11 @@ class PDF(View):
         pdf.drawString(150,605, cliente.direccion)
 
 
-    def tablaCitas(self,pdf,y):
+    def tablaCitas(self,pdf,y,slug,slug1):
             #Creamos una tupla de encabezados para neustra tabla
             encabezados = ('Fecha', 'Especialista', 'Informe')
             #Creamos una lista de tuplas que van a contener a las personas
-            detalles = [(u.fecha, u.idEspecialista,u.informe) for u in Cita.objects.filter(fecha__range=[self.fechas(pdf).ini, self.fechas(pdf).fin])]
+            detalles = [(u.fecha, u.idEspecialista,u.informe) for u in Cita.objects.filter(fecha__range=[slug , slug1])]
             #Establecemos el tamaño de cada una de las columnas de la tabla
             detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 5 * cm, 5 * cm, 5 * cm])
             #Aplicamos estilos a las celdas de la tabla
