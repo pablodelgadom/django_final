@@ -20,7 +20,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.colors import magenta, pink, blue
 from rest_framework.exceptions import ParseError
 from nucleo import serializers
-from nucleo.serializers import CitasSerializers
+from nucleo.serializers import CitasSerializers, EspecialistasSerializers
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -480,7 +480,7 @@ class Citas_APIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None, *args, **kwargs):
-        cli = Cita.objects.filter(realizada=True).filter(idCliente=self.request.user.id).order_by('-fecha')
+        cli = Cita.objects.filter(idCliente=self.request.user.id).filter(fecha<datetime.now()).order_by('-fecha')
         serializer = CitasSerializers(cli, many=True)
         return Response(serializer.data)
 
@@ -537,7 +537,7 @@ class TestView(APIView):
                 'WRONG credentials',
                 status=status.HTTP_401_UNAUTHORIZED
             )
-        
+
         user = User.objects.get(username=data['user'])
         if not user:
             return Response(
@@ -546,4 +546,5 @@ class TestView(APIView):
             )
 
         token = Token.objects.get_or_create(user=user)
+        print(user)
         return Response({'detail' : 'POST answer', 'token': token[0].key})
