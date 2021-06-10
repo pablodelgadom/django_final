@@ -6,7 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ServicesService {
 
-  apiUrl = 'http://localhost:8100'
+  apiUrl = 'http://127.0.0.1:8000/api'
 
   datos_usuario : any;
 
@@ -15,10 +15,10 @@ export class ServicesService {
 
   async login(username, password) {
     return await new Promise<any>(resolve => {
-      this.http.post(this.apiUrl + '/login',
+      this.http.post(this.apiUrl + '/token',
         {
-          username: username,
-          password: password
+          user: 'Raul',
+          password: 'usuario1'
         })
         .subscribe(data => {
           this.datos_usuario = data;

@@ -141,6 +141,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'nucleo/static')
 CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8101',
     'http://localhost:8100',
 )
 
