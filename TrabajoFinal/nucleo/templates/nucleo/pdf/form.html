@@ -1,10 +1,16 @@
 {% extends 'nucleo/base.html' %} 
-{% block titulo %} Especialistas {% endblock %}
+{% block titulo %} Filtrado {% endblock %}
 
 {%block contenido %}
 
 <form method="post" enctype="multipart/form-data">{% csrf_token %}
+
+    <h3> Filtrado de fechas para el pdf:</h3>
+
+    
     {{ form.as_p }}
+
+    <p><input type="submit" class="btn btn-primary btn-block" value="Crear Pdf"></p>
 
 </form>
 

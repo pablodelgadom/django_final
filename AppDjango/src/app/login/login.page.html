@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>login</ion-title>
+    <ion-title>Inicio de sesion</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,7 +8,7 @@
   <img [src]="imagen" class="img" />
   <ion-list>
     <ion-item>
-      <ion-label position="stacked">Dirección de correo</ion-label>
+      <ion-label position="stacked">Usuario</ion-label>
       <ion-input [formControl]="user" type="text"></ion-input>
     </ion-item>
     <ion-item>
@@ -16,5 +16,5 @@
       <ion-input [formControl]="password" type="password"></ion-input>
     </ion-item>
   </ion-list>
-  <ion-button class="btn btn-primary"expand="full" (click)="login()">Login</ion-button>
+  <ion-button class="btn btn-primary"expand="full" (click)="login()">Iniciar sesion</ion-button>
 </ion-content>

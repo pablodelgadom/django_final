@@ -45,8 +45,8 @@ urlpatterns = [
 
     #pdf
 
-    path('cliente/pdf/<int:pk>/<str:slug>/<str:slug1>', views.PDF.as_view(), name="informe_pdf"),
-    path('pdf/form', views.PDFcreate.as_view(), name="crearPDF"),
+    path('pdf', views.PDF.as_view(), name="generar_pdf"),
+    path('fechas', views.fechas, name="fechas"),
 
     #API
     path('api/citas', views.Citas_APIView.as_view()),

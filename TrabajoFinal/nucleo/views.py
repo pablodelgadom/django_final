@@ -10,7 +10,7 @@ from nucleo.forms import AplazarForm, CitaForm, EditUserForm, FechasForm, LeidoF
 from nucleo.models import Cita, Mensaje, User
 from django.shortcuts import redirect, render
 from django.views.generic import CreateView,UpdateView,DeleteView
-from django.urls.base import reverse_lazy
+from django.urls.base import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from reportlab.lib.units import cm
 from reportlab.lib import colors
@@ -349,27 +349,25 @@ def hoy(request, pk):
     return render(request, 'nucleo/citas/hoy.html',context)
 
 
-def crearPDF(request):
-    if request.method == 'POST':
-        form = FechasForm(request.POST)
-        if form.is_valid():
-            form.save()
-        return redirect('nucleo:Portada')
-    else:
-        form = FechasForm()
+def fechas(request):
 
-    return render(request, 'nucleo/pdf/form.html', {'form':form})
+    contact_form = FechasForm
+    generarpdf=PDF()
 
-class PDFcreate(CreateView):
-    model = Mensaje
-    form_class = FechasForm
-    template_name = 'nucleo/pdf/form.html'
-    success_url = reverse_lazy('nucleo:Portada')
-    
+
+    if request.method == "POST":
+        contact_form=FechasForm(data=request.POST)
+
+        if contact_form.is_valid():
+            fechaIni=request.POST.get('fechaIni',' ')
+            fechaFin=request.POST.get('fechaFin',' ')
+            print('La fecha inicial es '+fechaIni+' y la final '+fechaFin)
+            return redirect(request,'generar_pdf')
+
+    return render(request,'nucleo/pdf/form.html', {'form': contact_form})
+
+
 class PDF(View):
-
-    slug = None
-    slug1 = None
 
     def cabecera(self,pdf):
         #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
@@ -424,12 +422,16 @@ class PDF(View):
         pdf.drawString(60,605, 'Direccion:')
         pdf.drawString(150,605, cliente.direccion)
 
+    def fechas(self, fechaIni):
+        fecha_1 = fechaIni
+        print("fecha1")
+        return fecha_1
 
     def tablaCitas(self,pdf,y,slug,slug1):
             #Creamos una tupla de encabezados para neustra tabla
             encabezados = ('Fecha', 'Especialista', 'Informe')
             #Creamos una lista de tuplas que van a contener a las personas
-            detalles = [(u.fecha, u.idEspecialista,u.informe) for u in Cita.objects.filter(fecha__range=[slug , slug1])]
+            detalles = [(u.fecha, u.idEspecialista,u.informe) for u in Cita.objects.filter(fecha=self.kwargs.get('fechaI'))]
             #Establecemos el tamaño de cada una de las columnas de la tabla
             detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 5 * cm, 5 * cm, 5 * cm])
             #Aplicamos estilos a las celdas de la tabla
@@ -448,28 +450,6 @@ class PDF(View):
             #Definimos la coordenada donde se dibujará la tabla
             detalle_orden.drawOn(pdf, 60,y)
 
-    
-    def fechas(self,pdf):
-        # c = canvas.Canvas('simple_choices.pdf')
-        form = pdf.acroForm
-
-        pdf.drawString(60, 560, 'Fecha inicial:')
-        form.textfield(name='ini', tooltip='Fecha inicial',
-                    x=150, y=550, borderStyle='inset',
-                    borderColor=magenta, fillColor=pink, 
-                    width=75,
-                    textColor=blue, forceBorder=True)
-
-
-        pdf.drawString(60, 510, 'Fecha final:')
-        form.textfield(name='fin', tooltip='Fecha final',
-                    x=150, y=500, borderStyle='inset',
-                    borderColor=magenta, fillColor=pink, 
-                    width=75,
-                    textColor=blue, forceBorder=True)
-
-
-
 
 
 
@@ -480,7 +460,7 @@ class Citas_APIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None, *args, **kwargs):
-        cli = Cita.objects.filter(idCliente=self.request.user.id).filter(fecha<datetime.now()).order_by('-fecha')
+        cli = Cita.objects.filter(idCliente=self.request.user.id).filter(fecha__range=["2020-01-01", datetime.date.today()]).order_by('-fecha')
         serializer = CitasSerializers(cli, many=True)
         return Response(serializer.data)
 

@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Historial de citas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col
+        size="12"
+        size-lg="3"
+        size-md="2"
+        size-sm="6"
+        size-xs="12"
+        *ngFor="let cita of citas">
+        <ion-card color="tertiary">
+          <ion-item lines="none" color="tertiary">
+            <h2  style="font-size: 15px;">Especialista : {{ cita.idEspecialista.first_name }} {{cita.idEspecialista.last_name }}</h2>
+          </ion-item>
+          <ion-item lines="none" color="primary">
+            <h2  style="font-size: 15px;">Fecha : {{ cita.fecha  }}</h2>
+          </ion-item>
+          <ion-item lines="none" color="primary">
+            <h2  style="font-size: 15px;">Informe : {{ cita.informe  }}</h2>
+          </ion-item>          
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

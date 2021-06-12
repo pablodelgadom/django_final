@@ -1,4 +1,4 @@
-from nucleo.models import Cita, User, Mensaje
+from nucleo.models import Cita, Mensaje
 from django.contrib import admin
 
 

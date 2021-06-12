@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ServicesService } from '../../services.service';
+import { RestServiceService } from '../services/rest-service.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +12,8 @@ export class LoginPage implements OnInit {
   user= new FormControl('');
   password = new FormControl('');
   datos: any;
-  constructor(public restService: ServicesService, private router: Router) { }
+  imagen ="assets/icon/login.jpg";
+  constructor(public restService: RestServiceService, private router: Router) { }
 
   ngOnInit() {
   }

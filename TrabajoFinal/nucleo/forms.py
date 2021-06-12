@@ -1,6 +1,3 @@
-from datetime import date
-from django.forms import widgets
-from django.http import request
 from nucleo.models import Cita, Mensaje, User
 from django import forms
 
@@ -256,15 +253,7 @@ class RellenarForm(forms.ModelForm):
             'realizada'
         ]
 
-class FechasForm(forms.ModelForm):
-    
-    class Meta:
-        
-        fields= [
-            'fecha',
-            'fecha1'
-        ]
-        widgets = {
-            'fecha': forms.SelectDateWidget(),
-            'fecha1': forms.SelectDateWidget()
-        }
+class FechasForm(forms.Form):
+
+    fechaIni=forms.DateField(label='Fecha de Inicio ',required=True,widget=forms.DateInput(attrs={'class':'form-control nt-3','placeholder':'AAAA-MM-DD'}))
+    fechaFin=forms.DateField(label='Fecha Final ',required=True,widget=forms.DateInput(attrs={'class':'form-control nt-3','placeholder':'AAAA-MM-DD'}))
