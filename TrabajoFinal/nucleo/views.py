@@ -352,22 +352,18 @@ def hoy(request, pk):
 def fechas(request):
 
     contact_form = FechasForm
-    generarpdf=PDF()
-
 
     if request.method == "POST":
         contact_form=FechasForm(data=request.POST)
-
         if contact_form.is_valid():
-            fechaIni=request.POST.get('fechaIni',' ')
-            fechaFin=request.POST.get('fechaFin',' ')
-            print('La fecha inicial es '+fechaIni+' y la final '+fechaFin)
-            return redirect(request,'generar_pdf')
+            fechaInicio=request.POST.get('fechaInicio',' ')
+            fechaFinal=request.POST.get('fechaFinal',' ')
 
+            return redirect(reverse('nucleo:generar_pdf', kwargs={'fechaInicio':fechaInicio , 'fechaFinal':fechaFinal}))
     return render(request,'nucleo/pdf/form.html', {'form': contact_form})
 
 
-class PDF(View):
+class pdf(View):
 
     def cabecera(self,pdf):
         #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
@@ -380,28 +376,8 @@ class PDF(View):
         pdf.drawString(230, 790, u"YO TE AYUDO")
         pdf.setFont("Helvetica", 14)
         pdf.drawString(200, 770, u"REPORTE DE CLIENTE")
-         
-    def get(self, request, *args, **kwargs):
-        #Indicamos el tipo de contenido a devolver, en este caso un pdf
-        response = HttpResponse(content_type='application/pdf')
-        #La clase io.BytesIO permite tratar un array de bytes como un fichero binario, se utiliza como almacenamiento temporal
-        buffer = BytesIO()
-        #Canvas nos permite hacer el reporte con coordenadas X y Y
-        pdf = canvas.Canvas(buffer)
-        #Llamo al método cabecera donde están definidos los datos que aparecen en la cabecera del reporte.
-        self.cabecera(pdf)
-        # self.fechas(pdf)
-        self.datosCliente(pdf)
-        self.tablaCitas(pdf, 400)
-        #Con show page hacemos un corte de página para pasar a la siguiente
-        pdf.showPage()
-        pdf.save()
-        pdf = buffer.getvalue()
-        buffer.close()
-        response.write(pdf)
-        return response
 
-    def datosCliente(self,pdf):
+    def cliente(self,pdf):
 
         cliente = User.objects.get(id=self.request.user.id)
         usuario = []
@@ -422,16 +398,11 @@ class PDF(View):
         pdf.drawString(60,605, 'Direccion:')
         pdf.drawString(150,605, cliente.direccion)
 
-    def fechas(self, fechaIni):
-        fecha_1 = fechaIni
-        print("fecha1")
-        return fecha_1
-
-    def tablaCitas(self,pdf,y,slug,slug1):
+    def tablaCitas(self,pdf,y):
             #Creamos una tupla de encabezados para neustra tabla
             encabezados = ('Fecha', 'Especialista', 'Informe')
             #Creamos una lista de tuplas que van a contener a las personas
-            detalles = [(u.fecha, u.idEspecialista,u.informe) for u in Cita.objects.filter(fecha=self.kwargs.get('fechaI'))]
+            detalles = [(u.fecha, u.idEspecialista,u.informe) for u in Cita.objects.filter(fecha__range=[self.kwargs.get('fechaInicio'), self.kwargs.get('fechaFinal')])]
             #Establecemos el tamaño de cada una de las columnas de la tabla
             detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 5 * cm, 5 * cm, 5 * cm])
             #Aplicamos estilos a las celdas de la tabla
@@ -450,8 +421,26 @@ class PDF(View):
             #Definimos la coordenada donde se dibujará la tabla
             detalle_orden.drawOn(pdf, 60,y)
 
+    def get(self, request, *args, **kwargs):
+        #Indicamos el tipo de contenido a devolver, en este caso un pdf
+        response = HttpResponse(content_type='application/pdf')
+        #La clase io.BytesIO permite tratar un array de bytes como un fichero binario, se utiliza como almacenamiento temporal
+        buffer = BytesIO()
+        #Canvas nos permite hacer el reporte con coordenadas X y Y
+        pdf = canvas.Canvas(buffer)
+        #Llamo al método cabecera donde están definidos los datos que aparecen en la cabecera del reporte.
+        self.cabecera(pdf)
 
-
+        self.cliente(pdf)
+        y = 400
+        self.tablaCitas(pdf, y)
+        #Con show page hacemos un corte de página para pasar a la siguiente
+        pdf.showPage()
+        pdf.save()
+        pdf = buffer.getvalue()
+        buffer.close()
+        response.write(pdf)
+        return response
 
 #API
 

@@ -255,5 +255,5 @@ class RellenarForm(forms.ModelForm):
 
 class FechasForm(forms.Form):
 
-    fechaIni=forms.DateField(label='Fecha de Inicio ',required=True,widget=forms.DateInput(attrs={'class':'form-control nt-3','placeholder':'AAAA-MM-DD'}))
-    fechaFin=forms.DateField(label='Fecha Final ',required=True,widget=forms.DateInput(attrs={'class':'form-control nt-3','placeholder':'AAAA-MM-DD'}))
+    fechaInicio=forms.DateField(label='Fecha de Inicio ',required=True,widget=forms.DateInput(attrs={'class':'form-control nt-3','placeholder':'AAAA-MM-DD'}))
+    fechaFinal=forms.DateField(label='Fecha Final ',required=True,widget=forms.DateInput(attrs={'class':'form-control nt-3','placeholder':'AAAA-MM-DD'}))
