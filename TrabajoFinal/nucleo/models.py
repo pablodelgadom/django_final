@@ -63,8 +63,8 @@ class Cita(models.Model):
         verbose_name="Cita"
         verbose_name_plural="Citas"
 
-    def __str__(self):
-        return self.idCliente
+    # def __str__(self):
+    #     return self.idCliente
 
 
 class Mensaje(models.Model):

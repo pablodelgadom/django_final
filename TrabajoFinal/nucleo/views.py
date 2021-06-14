@@ -387,16 +387,16 @@ class pdf(View):
                 usuario.append(u)
 
         pdf.drawString(60,680, 'Dni:')
-        pdf.drawString(100,680, cliente.dni)
+        pdf.drawString(92,680, cliente.dni)
 
         pdf.drawString(60,655, 'Nombre:')
         pdf.drawString(120,655, cliente.first_name)
 
         pdf.drawString(60,630, 'Apellidos:')
-        pdf.drawString(150,630, cliente.last_name)
+        pdf.drawString(125,630, cliente.last_name)
 
         pdf.drawString(60,605, 'Direccion:')
-        pdf.drawString(150,605, cliente.direccion)
+        pdf.drawString(128,605, cliente.direccion)
 
     def tablaCitas(self,pdf,y):
             #Creamos una tupla de encabezados para neustra tabla
@@ -404,7 +404,7 @@ class pdf(View):
             #Creamos una lista de tuplas que van a contener a las personas
             detalles = [(u.fecha, u.idEspecialista,u.informe) for u in Cita.objects.filter(fecha__range=[self.kwargs.get('fechaInicio'), self.kwargs.get('fechaFinal')])]
             #Establecemos el tamaño de cada una de las columnas de la tabla
-            detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 5 * cm, 5 * cm, 5 * cm])
+            detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 5 * cm, 7 * cm, 7 * cm])
             #Aplicamos estilos a las celdas de la tabla
             detalle_orden.setStyle(TableStyle(
                 [
@@ -432,8 +432,7 @@ class pdf(View):
         self.cabecera(pdf)
 
         self.cliente(pdf)
-        y = 400
-        self.tablaCitas(pdf, y)
+        self.tablaCitas(pdf, 350)
         #Con show page hacemos un corte de página para pasar a la siguiente
         pdf.showPage()
         pdf.save()
