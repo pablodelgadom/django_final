@@ -45,7 +45,7 @@ urlpatterns = [
 
     #pdf
 
-    path('generar_pdf/<fechaInicio>?<fechaFinal>', views.pdf.as_view(), name="generar_pdf"),
+    path('generar_pdf/<fechaIni>?<fechaFin>', views.pdf.as_view(), name="generar_pdf"),
     path('fechas', views.fechas, name="fechas"),
 
     #API

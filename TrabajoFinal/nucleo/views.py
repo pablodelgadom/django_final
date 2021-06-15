@@ -351,16 +351,16 @@ def hoy(request, pk):
 @cliente_required
 def fechas(request):
 
-    contact_form = FechasForm
+    form = FechasForm()
 
     if request.method == "POST":
-        contact_form=FechasForm(data=request.POST)
-        if contact_form.is_valid():
-            fechaInicio=request.POST.get('fechaInicio',' ')
-            fechaFinal=request.POST.get('fechaFinal',' ')
+        form=FechasForm(data=request.POST)
+        if form.is_valid():
+            fechaIni=request.POST.get('fechaIni',' ')
+            fechaFin=request.POST.get('fechaFin',' ')
 
-            return redirect(reverse('nucleo:generar_pdf', kwargs={'fechaInicio':fechaInicio , 'fechaFinal':fechaFinal}))
-    return render(request,'nucleo/pdf/form.html', {'form': contact_form})
+            return redirect(reverse('nucleo:generar_pdf', kwargs={'fechaIni':fechaIni , 'fechaFin':fechaFin}))
+    return render(request,'nucleo/pdf/form.html', {'form': form})
 
 @method_decorator(cliente_required, name='dispatch')
 class pdf(View):
@@ -403,7 +403,7 @@ class pdf(View):
             #Creamos una tupla de encabezados para neustra tabla
             encabezados = ('Fecha', 'Especialista', 'Informe')
             #Creamos una lista de tuplas que van a contener a las personas
-            detalles = [(u.fecha, u.idEspecialista,u.informe) for u in Cita.objects.filter(fecha__range=[self.kwargs.get('fechaInicio'), self.kwargs.get('fechaFinal')])]
+            detalles = [(u.fecha, u.idEspecialista,u.informe) for u in Cita.objects.filter(fecha__range=[self.kwargs.get('fechaIni'), self.kwargs.get('fechaFin')])]
             #Establecemos el tamaño de cada una de las columnas de la tabla
             detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 5 * cm, 7 * cm, 7 * cm])
             #Aplicamos estilos a las celdas de la tabla
@@ -449,7 +449,7 @@ class Citas_APIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None, *args, **kwargs):
-        cli = Cita.objects.filter(idCliente=self.request.user.id).filter(fecha__range=["2020-01-01", datetime.date.today()]).order_by('fecha')
+        cli = Cita.objects.filter(idCliente=self.request.user.id, fecha__lt=(datetime.date.today()))
         serializer = CitasSerializers(cli, many=True)
         return Response(serializer.data)
 
