@@ -348,7 +348,7 @@ def hoy(request, pk):
     context={'citas':cita}
     return render(request, 'nucleo/citas/hoy.html',context)
 
-
+@cliente_required
 def fechas(request):
 
     contact_form = FechasForm
@@ -362,7 +362,7 @@ def fechas(request):
             return redirect(reverse('nucleo:generar_pdf', kwargs={'fechaInicio':fechaInicio , 'fechaFinal':fechaFinal}))
     return render(request,'nucleo/pdf/form.html', {'form': contact_form})
 
-
+@method_decorator(cliente_required, name='dispatch')
 class pdf(View):
 
     def cabecera(self,pdf):
@@ -397,6 +397,7 @@ class pdf(View):
 
         pdf.drawString(60,605, 'Direccion:')
         pdf.drawString(128,605, cliente.direccion)
+
 
     def tablaCitas(self,pdf,y):
             #Creamos una tupla de encabezados para neustra tabla
