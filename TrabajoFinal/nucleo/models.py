@@ -60,6 +60,8 @@ class Cita(models.Model):
     realizada=models.BooleanField(null=False, blank=False)
 
     class Meta:
+        ordering = ['-fecha']
+
         verbose_name="Cita"
         verbose_name_plural="Citas"
 

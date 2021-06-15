@@ -448,7 +448,7 @@ class Citas_APIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None, *args, **kwargs):
-        cli = Cita.objects.filter(idCliente=self.request.user.id).filter(fecha__range=["2020-01-01", datetime.date.today()]).order_by('-fecha')
+        cli = Cita.objects.filter(idCliente=self.request.user.id).filter(fecha__range=["2020-01-01", datetime.date.today()]).order_by('fecha')
         serializer = CitasSerializers(cli, many=True)
         return Response(serializer.data)
 
